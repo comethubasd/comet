@@ -196,31 +196,6 @@ RightGroupbox:AddDropdown("Weapon", {
 	Visible = true, -- Will make the dropdown invisible (true / false)
 })
 
-
-RightGroupbox:AddDropdown("trait", {
-	Values = { "Ambidextrous", "Athlete", "Bunnys", "Clamps", "Claw", "Diver", "Egoist", "Fortune", "GoldenZone",
-    "LongStrides", "Metavision", "NoLook", "Powerhouse", "Puppeteer", "QuickDraw", "Revolver", "Ripper",
-    "Surf", "Tank", "Tireless", "TwinGuns", "Unbreakable" },
-	Default = 0, -- number index of the value / string
-	Multi = false, -- true / false, allows multiple choices to be selected
-
-	Text = "Search trait",
-	Tooltip = "This is a tooltip", -- Information shown when you hover over the dropdown
-	DisabledTooltip = "I am disabled!", -- Information shown when you hover over the dropdown while it's disabled
-
-	Searchable = true, -- true / false, makes the dropdown searchable (great for a long list of values)
-
-	Callback = function(Value)
-        getTraitSelection = Value
-		print("Trait got changed. New value:", getTraitSelection)
-	end,
-
-	Disabled = false, -- Will disable the dropdown (true / false)
-	Visible = true, -- Will make the dropdown invisible (true / false)
-})
-
-
-
 RightGroupbox:AddToggle("weapon roll", {
 	Text = "Auto roll weapon",
 	Tooltip = "Automatically rerolls until desired weapon is found",
@@ -303,6 +278,29 @@ RightGroupbox:AddToggle("weapon roll", {
 	end
 end,
 })
+
+RightGroupbox:AddDropdown("trait", {
+	Values = { "Ambidextrous", "Athlete", "Bunnys", "Clamps", "Claw", "Diver", "Egoist", "Fortune", "GoldenZone",
+    "LongStrides", "Metavision", "NoLook", "Powerhouse", "Puppeteer", "QuickDraw", "Revolver", "Ripper",
+    "Surf", "Tank", "Tireless", "TwinGuns", "Unbreakable" },
+	Default = 0, -- number index of the value / string
+	Multi = false, -- true / false, allows multiple choices to be selected
+
+	Text = "Search trait",
+	Tooltip = "This is a tooltip", -- Information shown when you hover over the dropdown
+	DisabledTooltip = "I am disabled!", -- Information shown when you hover over the dropdown while it's disabled
+
+	Searchable = true, -- true / false, makes the dropdown searchable (great for a long list of values)
+
+	Callback = function(Value)
+        getTraitSelection = Value
+		print("Trait got changed. New value:", getTraitSelection)
+	end,
+
+	Disabled = false, -- Will disable the dropdown (true / false)
+	Visible = true, -- Will make the dropdown invisible (true / false)
+})
+
 
 RightGroupbox:AddToggle("trait roll", {
 	Text = "Auto roll Trait",
