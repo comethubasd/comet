@@ -198,7 +198,7 @@ RightGroupbox:AddDropdown("Weapon", {
 
 
 RightGroupbox:AddDropdown("trait", {
-	Values = { "Ambidextrous", "Athlete", "Bunnys", "Calculate", "Clamps", "Claw", "Destruction", "Diver", "Dragon" ,"Egoist", "Fortune", "GoldenZone",
+	Values = { "Ambidextrous", "Athlete", "Bunnys", "Clamps", "Claw", "Diver", "Egoist", "Fortune", "GoldenZone",
     "LongStrides", "Metavision", "NoLook", "Powerhouse", "Puppeteer", "QuickDraw", "Revolver", "Ripper",
     "Surf", "Tank", "Tireless", "TwinGuns", "Unbreakable" },
 	Default = 0, -- number index of the value / string
@@ -281,13 +281,14 @@ RightGroupbox:AddToggle("trait role", {
 })
 
 local LeftGroupbox2 = Tabs.Main:AddLeftGroupbox("Current stuff")
+local yen = player.Character.RankSystem.Yen
 
 pingLabel = LeftGroupbox2:AddLabel("Current Ping: ...")
 LeftGroupbox2:AddLabel("note the lower your")
 LeftGroupbox2:AddLabel("ping the faster you spin")
 weaponLabel = LeftGroupbox2:AddLabel("Current Weapon: ...")
 traitLabel = LeftGroupbox2:AddLabel("Current Trait: ...")
-
+yenLabel = LeftGroupbox2:AddLabel("Yen: ...")
 
 
 -- Update Labels Loop
@@ -318,6 +319,9 @@ task.spawn(function()
             end
         end
         traitLabel:SetText("Current Trait: " .. currentTrait)
+
+		yen = player.Character.RankSystem.Yen.value
+		yenLabel:SetText("Yen: " .. yen)
 
         task.wait(0.02)
     end
