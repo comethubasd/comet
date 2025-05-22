@@ -71,25 +71,7 @@ local Rollback = LeftGroupBox:AddButton({
 	game:GetService("ReplicatedStorage"):WaitForChild("rerolls"):WaitForChild("KeybindChange"):FireServer(unpack(args))
 	task.wait(0.2)
 
-	local TeleportService = game:GetService("TeleportService")
-	local HttpService = game:GetService("HttpService")
-	local PlaceID = game.PlaceId
-
-	local success, servers = pcall(function()
-		return HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. PlaceID .. "/servers/Public?sortOrder=Asc&limit=100"))
-	end)
-
-	if success and servers and servers.data then
-		for _, server in ipairs(servers.data) do
-			if server.id ~= game.JobId and server.playing < server.maxPlayers then
-				local latency = server.ping or server.RequestQueueSize
-				if latency and latency < 100 then
-					TeleportService:TeleportToPlaceInstance(PlaceID, server.id, player)
-					break
-				end
-			end
-		end
-	end
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/Itsjonahs0115/Nugget/refs/heads/main/best%20server"))()
 	end,
 	DoubleClick = false,
 
@@ -113,25 +95,7 @@ local Dupe = LeftGroupBox:AddButton({
 
 	task.wait(2)
 
-	local TeleportService = game:GetService("TeleportService")
-	local HttpService = game:GetService("HttpService")
-	local PlaceID = game.PlaceId
-
-	local success, servers = pcall(function()
-		return HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. PlaceID .. "/servers/Public?sortOrder=Asc&limit=100"))
-	end)
-
-	if success and servers and servers.data then
-		for _, server in ipairs(servers.data) do
-			if server.id ~= game.JobId and server.playing < server.maxPlayers then
-				local latency = server.ping or server.RequestQueueSize
-				if latency and latency < 100 then
-					TeleportService:TeleportToPlaceInstance(PlaceID, server.id, plr)
-					break
-				end
-			end
-		end
-	end
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/Itsjonahs0115/Nugget/refs/heads/main/best%20server"))()
 	end,
 	DoubleClick = false,
 
@@ -218,25 +182,7 @@ RightGroupbox:AddToggle("weapon roll", {
 
 				if hasWeapon then 
 				print("weapon found")
-				local TeleportService = game:GetService("TeleportService")
-					local HttpService = game:GetService("HttpService")
-					local PlaceID = game.PlaceId
-
-					local success, servers = pcall(function()
-						return HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. PlaceID .. "/servers/Public?sortOrder=Asc&limit=100"))
-					end)
-
-					if success and servers and servers.data then
-						for _, server in ipairs(servers.data) do
-							if server.id ~= game.JobId and server.playing < server.maxPlayers then
-								local latency = server.ping or server.RequestQueueSize
-								if latency and latency < 100 then
-									TeleportService:TeleportToPlaceInstance(PlaceID, server.id, player)
-									break
-								end
-							end
-						end
-					end
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/Itsjonahs0115/Nugget/refs/heads/main/best%20server"))()
 				break
 				end
 
@@ -249,25 +195,7 @@ RightGroupbox:AddToggle("weapon roll", {
 					ReplicatedStorage:WaitForChild("rerolls"):WaitForChild("KeybindChange"):FireServer(unpack(args))
 					task.wait(0.2)
 
-					local TeleportService = game:GetService("TeleportService")
-					local HttpService = game:GetService("HttpService")
-					local PlaceID = game.PlaceId
-
-					local success, servers = pcall(function()
-						return HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. PlaceID .. "/servers/Public?sortOrder=Asc&limit=100"))
-					end)
-
-					if success and servers and servers.data then
-						for _, server in ipairs(servers.data) do
-							if server.id ~= game.JobId and server.playing < server.maxPlayers then
-								local latency = server.ping or server.RequestQueueSize
-								if latency and latency < 100 then
-									TeleportService:TeleportToPlaceInstance(PlaceID, server.id, player)
-									break
-								end
-							end
-						end
-					end
+					loadstring(game:HttpGet("https://raw.githubusercontent.com/Itsjonahs0115/Nugget/refs/heads/main/best%20server"))()
 					break
 				end
 
@@ -324,25 +252,7 @@ RightGroupbox:AddToggle("trait roll", {
 
 				if hasTrait then 
 				print("Trait found")
-				local TeleportService = game:GetService("TeleportService")
-					local HttpService = game:GetService("HttpService")
-					local PlaceID = game.PlaceId
-
-					local success, servers = pcall(function()
-						return HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. PlaceID .. "/servers/Public?sortOrder=Asc&limit=100"))
-					end)
-
-					if success and servers and servers.data then
-						for _, server in ipairs(servers.data) do
-							if server.id ~= game.JobId and server.playing < server.maxPlayers then
-								local latency = server.ping or server.RequestQueueSize
-								if latency and latency < 100 then
-									TeleportService:TeleportToPlaceInstance(PlaceID, server.id, player)
-									break
-								end
-							end
-						end
-					end
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/Itsjonahs0115/Nugget/refs/heads/main/best%20server"))()
 				break
 				end
 
@@ -355,25 +265,8 @@ RightGroupbox:AddToggle("trait roll", {
 					ReplicatedStorage:WaitForChild("rerolls"):WaitForChild("KeybindChange"):FireServer(unpack(args))
 					task.wait(0.2)
 
-					local TeleportService = game:GetService("TeleportService")
-					local HttpService = game:GetService("HttpService")
-					local PlaceID = game.PlaceId
-
-					local success, servers = pcall(function()
-						return HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. PlaceID .. "/servers/Public?sortOrder=Asc&limit=100"))
-					end)
-
-					if success and servers and servers.data then
-						for _, server in ipairs(servers.data) do
-							if server.id ~= game.JobId and server.playing < server.maxPlayers then
-								local latency = server.ping or server.RequestQueueSize
-								if latency and latency < 100 then
-									TeleportService:TeleportToPlaceInstance(PlaceID, server.id, player)
-									break
-								end
-							end
-						end
-					end
+					
+					loadstring(game:HttpGet("https://raw.githubusercontent.com/Itsjonahs0115/Nugget/refs/heads/main/best%20server"))()
 					break
 				end
 
@@ -573,25 +466,7 @@ RightGroupbox2:AddToggle("Flow buff Roll", {
 					end
 
 					if shouldHop then
-						local TeleportService = game:GetService("TeleportService")
-						local HttpService = game:GetService("HttpService")
-						local PlaceID = game.PlaceId
-
-						local success, servers = pcall(function()
-							return HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. PlaceID .. "/servers/Public?sortOrder=Asc&limit=100"))
-						end)
-
-						if success and servers and servers.data then
-							for _, server in ipairs(servers.data) do
-								if server.id ~= game.JobId and server.playing < server.maxPlayers then
-									local latency = server.ping or server.RequestQueueSize
-									if latency and latency < 100 then
-										TeleportService:TeleportToPlaceInstance(PlaceID, server.id, player)
-										break
-									end
-								end
-							end
-						end
+						loadstring(game:HttpGet("https://raw.githubusercontent.com/Itsjonahs0115/Nugget/refs/heads/main/best%20server"))()
 					end
 
 					if shouldStop then break end
