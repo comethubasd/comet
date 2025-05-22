@@ -208,7 +208,7 @@ end,
 })
 
 RightGroupbox:AddDropdown("trait", {
-	Values = { "Ambidextrous", "Athlete", "Bunnys", "Clamps", "Claw", "Diver", "Egoist", "Fortune", "GoldenZone",
+	Values = { "Ambidextrous", "Athlete", "Bunnys", "Calculate", "Clamps", "Claw", "Consistent", "Destruction", "Diver", "Dragon", "Egoist", "Fortune", "GoldenZone",
     "LongStrides", "Metavision", "NoLook", "Powerhouse", "Puppeteer", "QuickDraw", "Revolver", "Ripper",
     "Surf", "Tank", "Tireless", "TwinGuns", "Unbreakable" },
 	Default = 0, -- number index of the value / string
