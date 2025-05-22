@@ -1,0 +1,50 @@
+local HTTPService = game:GetService("HttpService")
+local TeleportService = game:GetService("TeleportService")
+local StatsService = game:GetService("Stats")
+local Players = game:GetService("Players")
+
+local function fetchServersData(placeId, limit)
+    local url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?limit=%d", placeId, limit)
+    local success, response = pcall(function()
+        return HTTPService:JSONDecode(game:HttpGet(url))
+    end)
+
+    if success and response and response.data then
+        return response.data
+    end
+
+    return nil
+end
+
+local placeId = game.PlaceId
+local serverLimit = 100
+local servers = fetchServersData(placeId, serverLimit)
+
+if not servers then
+    return
+end
+
+local lowestPingServer = nil
+
+-- We can't actually get ping from the HTTP API, so simulate choosing a different server
+for _, server in pairs(servers) do
+    if server.id ~= game.JobId and server.playing < server.maxPlayers then
+        lowestPingServer = server
+        break -- pick first valid one, no ping info available in real API
+    end
+end
+
+local commonLoadTime = 5
+task.wait(commonLoadTime)
+
+local pingThreshold = 60
+local serverStats = StatsService.Network.ServerStatsItem
+local dataPing = serverStats["Data Ping"]:GetValueString()
+local pingValue = tonumber(dataPing:match("(%d+)"))
+
+if pingValue >= pingThreshold and lowestPingServer then
+    TeleportService:TeleportToPlaceInstance(placeId, lowestPingServer.id)
+else
+    print("good ping — rejoining same server")
+    TeleportService:TeleportToPlaceInstance(placeId, game.JobId, Players.LocalPlayer)
+end
