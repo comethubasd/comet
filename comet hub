@@ -54,10 +54,46 @@ local Window = Library:CreateWindow({
 local Tabs = {
 	-- Creates a new tab titled Main
 	Main = Window:AddTab("Main", "user"),
+	ingame = Window:AddTab("In game", "user"),
 	["UI Settings"] = Window:AddTab("UI Settings", "settings"),
 }
 
 local LeftGroupBox = Tabs.Main:AddLeftGroupbox("Misc")
+
+
+
+local animation = LeftGroupBox:AddButton({
+	Text = "animation",
+	Func = function()
+	local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+-- Create and load the animation
+local animation = Instance.new("Animation")
+animation.AnimationId = "rbxassetid://12830711336"
+
+-- Load and play the animation
+local animator = humanoid:FindFirstChildOfClass("Animator")
+if not animator then
+    animator = Instance.new("Animator")
+    animator.Parent = humanoid
+end
+
+local animationTrack = animator:LoadAnimation(animation)
+animationTrack:Play()
+
+	end,
+	DoubleClick = false,
+
+	Tooltip = "This is the main button",
+	DisabledTooltip = "I am disabled!",
+
+	Disabled = false, -- Will disable the button (true / false)
+	Visible = true, -- Will make the button invisible (true / false)
+	Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
+})
 
 local Rollback = LeftGroupBox:AddButton({
 	Text = "Rollback",
@@ -553,7 +589,144 @@ RightGroupbox2:AddToggle("Flow buff Roll", {
 
 
 
+local LeftGroupBox5 = Tabs.ingame:AddLeftGroupbox("Auto Flick")
 
+local shootPower = 10.5
+local shootAngle = 70
+
+LeftGroupBox5:AddSlider("flick power", {
+	Text = "flick power",
+	Default = 10.5,
+	Min = 10.5,
+	Max = 12,
+	Rounding = 1,
+	Compact = false,
+
+	Callback = function(Value)
+		shootPower = Value
+	end,
+
+	Tooltip = "I am a slider!", -- Information shown when you hover over the slider
+	DisabledTooltip = "I am disabled!", -- Information shown when you hover over the slider while it's disabled
+
+	Disabled = false, -- Will disable the slider (true / false)
+	Visible = true, -- Will make the slider invisible (true / false)
+})
+
+LeftGroupBox5:AddSlider("flick Angle", {
+	Text = "flick Angle",
+	Default = 70,
+	Min = 40,
+	Max = 80,
+	Rounding = 1,
+	Compact = false,
+
+	Callback = function(Value)
+		shootAngle = Value
+	end,
+
+	Tooltip = "I am a slider!", -- Information shown when you hover over the slider
+	DisabledTooltip = "I am disabled!", -- Information shown when you hover over the slider while it's disabled
+
+	Disabled = false, -- Will disable the slider (true / false)
+	Visible = true, -- Will make the slider invisible (true / false)
+})
+
+local shootConnection -- Declared outside to persist
+
+LeftGroupBox5:AddToggle("Auto flick", {
+    Text = "Auto flick",
+    Tooltip = "Automatically rerolls until desired weapon is found",
+    DisabledTooltip = "This toggle is disabled",
+
+    Default = false,
+    Disabled = false,
+    Visible = true,
+    Risky = false,
+
+    Callback = function(Value)
+        local UserInputService = game:GetService("UserInputService")
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoid = character:WaitForChild("Humanoid")
+
+        local function shoot()
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+            local forward = humanoidRootPart.CFrame.LookVector
+
+            local animation = Instance.new("Animation")
+            animation.AnimationId = "rbxassetid://12830711336"
+
+            local animator = humanoid:FindFirstChildOfClass("Animator")
+            if not animator then
+                animator = Instance.new("Animator")
+                animator.Parent = humanoid
+            end
+
+            local animationTrack = animator:LoadAnimation(animation)
+            animationTrack:Play()
+
+            local horizontalForward = Vector3.new(forward.X, 0, forward.Z)
+            if horizontalForward.Magnitude == 0 then
+                horizontalForward = Vector3.new(0, 0, 1)
+            else
+                horizontalForward = horizontalForward.Unit
+            end
+
+            local upward = Vector3.new(0, 1, 0)
+            local elevationAngle = math.rad(shootAngle)
+            local directionUnit = (horizontalForward * math.cos(elevationAngle) + upward * math.sin(elevationAngle)).Unit
+
+            local direction = directionUnit * shootPower -- scale by shootPower
+
+            local originalArgs = {
+                shootPower, -- Replace the hardcoded value with shootPower here
+                false,
+                false,
+                false,
+                false,
+                false,
+                [9] = false,
+                [10] = Color3.new(0.8017513155937195, 0.31795769929885864, 0.627495288848877),
+                [11] = 13,
+                [12] = false,
+                [13] = false,
+                [14] = false,
+                [15] = false,
+                [16] = false,
+                [17] = false,
+                [18] = false,
+                [20] = false,
+                [22] = 0.03169425638392567,
+                [23] = false
+            }
+
+            local args = {vector.create(direction.X, direction.Y, direction.Z)}
+            for i, v in pairs(originalArgs) do
+                args[i + 1] = v
+            end
+
+            ReplicatedStorage:WaitForChild("shoot"):FireServer(unpack(args))
+        end
+
+        if Value then
+            shootConnection = UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+                if not gameProcessedEvent and input.KeyCode == Enum.KeyCode.C then
+                    shoot()
+                end
+            end)
+        else
+            if shootConnection then
+                shootConnection:Disconnect()
+                shootConnection = nil
+            end
+        end
+    end,
+})
 
 
 
