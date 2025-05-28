@@ -107,7 +107,7 @@ local Rollback = LeftGroupBox:AddButton({
 	game:GetService("ReplicatedStorage"):WaitForChild("rerolls"):WaitForChild("KeybindChange"):FireServer(unpack(args))
 	task.wait(0.2)
 
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/Itsjonahs0115/Nugget/refs/heads/main/best%20server"))()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
 	end,
 	DoubleClick = false,
 
@@ -131,7 +131,7 @@ local Dupe = LeftGroupBox:AddButton({
 
 	task.wait(2)
 
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/Itsjonahs0115/Nugget/refs/heads/main/best%20server"))()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
 	end,
 	DoubleClick = false,
 
@@ -151,7 +151,6 @@ local Redeem = LeftGroupBox:AddButton({
     code:FireServer("125MILVISITS")
     code:FireServer("DRAGONHEADER")
     code:FireServer("150KMEMBERS")
-    code:FireServer("70KLIKES")
     code:FireServer("MEDALXLOCKED")
     code:FireServer("10KSUBS")
     code:FireServer("SEASON5WINNER")
@@ -291,7 +290,7 @@ RightGroupbox:AddToggle("weapon roll", {
 
 				if hasWeapon then 
 				print("weapon found")
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/Itsjonahs0115/Nugget/refs/heads/main/best%20server"))()
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
 				break
 				end
 
@@ -304,7 +303,7 @@ RightGroupbox:AddToggle("weapon roll", {
 					ReplicatedStorage:WaitForChild("rerolls"):WaitForChild("KeybindChange"):FireServer(unpack(args))
 					task.wait(0.2)
 
-					loadstring(game:HttpGet("https://raw.githubusercontent.com/Itsjonahs0115/Nugget/refs/heads/main/best%20server"))()
+					loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
 					break
 				end
 
@@ -361,7 +360,7 @@ RightGroupbox:AddToggle("trait roll", {
 
 				if hasTrait then 
 				print("Trait found")
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/Itsjonahs0115/Nugget/refs/heads/main/best%20server"))()
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
 				break
 				end
 
@@ -375,7 +374,7 @@ RightGroupbox:AddToggle("trait roll", {
 					task.wait(0.2)
 
 					
-					loadstring(game:HttpGet("https://raw.githubusercontent.com/Itsjonahs0115/Nugget/refs/heads/main/best%20server"))()
+					loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
 					break
 				end
 
@@ -575,7 +574,7 @@ RightGroupbox2:AddToggle("Flow buff Roll", {
 					end
 
 					if shouldHop then
-						loadstring(game:HttpGet("https://raw.githubusercontent.com/Itsjonahs0115/Nugget/refs/heads/main/best%20server"))()
+						loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
 					end
 
 					if shouldStop then break end
