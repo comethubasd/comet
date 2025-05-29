@@ -72,7 +72,7 @@ local humanoid = character:WaitForChild("Humanoid")
 
 -- Create and load the animation
 local animation = Instance.new("Animation")
-animation.AnimationId = "rbxassetid://12830711336"
+animation.AnimationId = "rbxassetid://13857940523"
 
 -- Load and play the animation
 local animator = humanoid:FindFirstChildOfClass("Animator")
@@ -635,7 +635,7 @@ local shootConnection -- Declared outside to persist
 
 LeftGroupBox5:AddToggle("Auto flick", {
     Text = "Auto flick",
-    Tooltip = "Automatically rerolls until desired weapon is found",
+    Tooltip = "ts is form auto aim twin",
     DisabledTooltip = "This toggle is disabled",
 
     Default = false,
@@ -727,7 +727,181 @@ LeftGroupBox5:AddToggle("Auto flick", {
     end,
 })
 
+local autoAimConnection -- store keybind connection to manage later
 
+LeftGroupBox5:AddToggle("form autoaim", {
+    Text = "Form autoaim",
+    Tooltip = "Automatically rerolls until desired weapon is found",
+    DisabledTooltip = "This toggle is disabled",
+
+    Default = false,
+    Disabled = false,
+    Visible = true,
+    Risky = false,
+
+    Callback = function(Value)
+        if not Value then
+            if autoAimConnection then
+                autoAimConnection:Disconnect()
+                autoAimConnection = nil
+            end
+            return
+        end
+
+        local player = game.Players.LocalPlayer
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local box1 = workspace.Box:WaitForChild("Box1")
+        local box2 = workspace.Box:WaitForChild("Box2")
+        local sensorGoals = workspace:WaitForChild("SensorGoals")
+        local ball = workspace.BallFolder:WaitForChild("Ball")
+
+        local function createCornerParts()
+            local partsInfo = {
+                {name = "R Top Left Corner", position = Vector3.new(-464.58, 7.93, -47.13)},
+                {name = "R Top Right Corner", position = Vector3.new(-464.58, 7.93, -85.54)},
+                {name = "L Top Left Corner", position = Vector3.new(270.83, 7.93, -85.92)},
+                {name = "L Top Right Corner", position = Vector3.new(270.83, 7.93, -47.52)}
+            }
+
+            for _, info in ipairs(partsInfo) do
+                if not workspace:FindFirstChild(info.name) then
+                    local part = Instance.new("Part")
+                    part.Name = info.name
+                    part.Size = Vector3.new(1, 1, 1)
+                    part.Position = info.position
+                    part.Anchored = true
+                    part.CanCollide = false
+                    part.Transparency = 1
+                    part.Parent = workspace
+                end
+            end
+        end
+
+        createCornerParts()
+
+        local corners = {
+            RTopLeft = workspace:FindFirstChild("R Top Left Corner"),
+            RTopRight = workspace:FindFirstChild("R Top Right Corner"),
+            LTopLeft = workspace:FindFirstChild("L Top Left Corner"),
+            LTopRight = workspace:FindFirstChild("L Top Right Corner")
+        }
+
+        local function isInBox(box)
+            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            if hrp then
+                local pos = hrp.Position
+                local boxPos = box.Position
+                local boxSize = box.Size
+                return pos.X > boxPos.X - boxSize.X/2 and pos.X < boxPos.X + boxSize.X/2 and
+                       pos.Y > boxPos.Y - boxSize.Y/2 and pos.Y < boxPos.Y + boxSize.Y/2 and
+                       pos.Z > boxPos.Z - boxSize.Z/2 and pos.Z < boxPos.Z + boxSize.Z/2
+            end
+            return false
+        end
+
+        local function isPlayerOnLeftOrRight(box)
+            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            if not hrp then return "unknown" end
+            return box.CFrame.RightVector:Dot((hrp.Position - box.Position).Unit) > 0 and "right" or "left"
+        end
+
+        local function hasStraightPathToTarget(box)
+            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            return hrp and math.abs(hrp.Position.Z - box.Position.Z) < 0.01
+        end
+
+        local function determineTarget(box)
+            if hasStraightPathToTarget(box) then
+                return box == box1 and sensorGoals:GetChildren()[2] or sensorGoals:FindFirstChild("SensorGoal")
+            else
+                local side = isPlayerOnLeftOrRight(box)
+                if box == box1 then
+                    return side == "left" and corners.RTopRight or corners.RTopLeft
+                elseif box == box2 then
+                    return side == "left" and corners.LTopLeft or corners.LTopRight
+                end
+            end
+        end
+
+        local function aimAtTargetOpposite(target)
+            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            if hrp and target then
+                local direction = (target.Position - hrp.Position).Unit
+                hrp.CFrame = CFrame.new(hrp.Position, hrp.Position - direction)
+            end
+        end
+
+        local function fireFormlessShot(target)
+            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            if not hrp or not target then return end
+
+            local aura = player.Character:FindFirstChild("AuraColour")
+            local r = aura and aura:FindFirstChild("Red") and aura.Red.Value or 1
+            local g = aura and aura:FindFirstChild("Green") and aura.Green.Value or 1
+            local b = aura and aura:FindFirstChild("Blue") and aura.Blue.Value or 1
+
+            local shotDirection = (target.Position - hrp.Position).Unit
+
+            local args = {
+                [1] = shotDirection * 1.25 - hrp.CFrame.UpVector / 25,
+                [2] = -100,
+                [3] = false,
+                [4] = true,
+                [5] = false,
+                [6] = false,
+                [7] = false,
+                [9] = false,
+                [10] = Color3.new(r, g, b),
+                [11] = 40,
+                [12] = false,
+                [13] = false,
+                [14] = false,
+                [15] = false,
+                [16] = true,
+                [17] = false,
+                [18] = false
+            }
+
+            ReplicatedStorage:WaitForChild("SpecEvents"):WaitForChild("Formless"):FireServer(unpack(args))
+        end
+
+        local function playFormlessAnimation()
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if not humanoid then return end
+
+            if humanoid.RigType ~= Enum.HumanoidRigType.R6 then
+                warn("Formless animation requires R6 rig")
+                return
+            end
+
+            local animation = Instance.new("Animation")
+            animation.AnimationId = "rbxassetid://13857940523"
+            local track = humanoid:LoadAnimation(animation)
+            track:Play()
+            track:AdjustSpeed(1)
+        end
+
+        local function runAutoAimFormless()
+            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            if not hrp then return end
+
+            local closestBox = (hrp.Position - box1.Position).Magnitude < (hrp.Position - box2.Position).Magnitude and box1 or box2
+            local target = determineTarget(closestBox)
+            if target then
+                aimAtTargetOpposite(target)
+                fireFormlessShot(target)
+                playFormlessAnimation()
+            end
+        end
+
+        autoAimConnection = game:GetService("UserInputService").InputBegan:Connect(function(input, gpe)
+            if not gpe and input.KeyCode == Enum.KeyCode.R then
+                runAutoAimFormless()
+            end
+        end)
+    end,
+})
 
 
 
