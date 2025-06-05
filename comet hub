@@ -903,8 +903,123 @@ LeftGroupBox5:AddToggle("form autoaim", {
     end,
 })
 
+local Fps boost = LeftGroupBox5:AddButton({
+	Text = "Fps boost",
+	Func = function()
+		-- FPS Booster Script
+-- Place this in StarterPlayer > StarterPlayerScripts
 
+local lighting = game:GetService("Lighting")
+local terrain = workspace:FindFirstChildOfClass("Terrain")
 
+-- Lower lighting effects
+lighting.GlobalShadows = false
+lighting.FogEnd = 1000000
+lighting.Brightness = 1
+lighting.EnvironmentDiffuseScale = 0
+lighting.EnvironmentSpecularScale = 0
+
+-- Set Terrain settings to low
+if terrain then
+    terrain.WaterWaveSize = 0
+    terrain.WaterWaveSpeed = 0
+    terrain.WaterReflectance = 0
+    terrain.WaterTransparency = 1
+end
+
+-- Disable post-processing effects
+for _, v in pairs(lighting:GetChildren()) do
+    if v:IsA("PostEffect") then
+        v.Enabled = false
+    end
+end
+
+-- Hide decals/textures
+local function optimize(instance)
+    for _, obj in pairs(instance:GetDescendants()) do
+        if obj:IsA("Decal") or obj:IsA("Texture") then
+            obj.Transparency = 1
+        elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") then
+            obj.Enabled = false
+        elseif obj:IsA("Explosion") then
+            obj.Visible = false
+        end
+    end
+end
+
+-- Optimize existing game
+optimize(game)
+
+-- Also optimize new instances added later
+game.DescendantAdded:Connect(function(obj)
+    if obj:IsA("Decal") or obj:IsA("Texture") then
+        obj.Transparency = 1
+    elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") then
+        obj.Enabled = false
+    elseif obj:IsA("Explosion") then
+        obj.Visible = false
+    end
+end)
+
+print("FPS Boost Applied")
+
+	end,
+	DoubleClick = false,
+
+	Tooltip = "This is the main button",
+	DisabledTooltip = "I am disabled!",
+
+	Disabled = false, -- Will disable the button (true / false)
+	Visible = true, -- Will make the button invisible (true / false)
+	Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
+})
+
+local Servercrash = LeftGroupBox5:AddButton({
+	Text = "Server crash",
+	Func = function()
+		-- Services
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Remotes
+local OwnerCommands = ReplicatedStorage:WaitForChild("JojoRemotes"):WaitForChild("OwnerCommands")
+local EmoteVFX = ReplicatedStorage:WaitForChild("EmoteVFX")
+
+-- Emotes list
+local emotes = {
+    "CHOCOLATE", "LOVE", "HEART", "ROSE", "CUPID", "LEAD", "PUZZLE",
+    "THINK", "VISION", "KING", "READY", "LAZY", "CHAMELEON", "PREPARED"
+}
+
+-- Loop function
+task.spawn(function()
+    while true do
+        local start = os.clock()
+
+        -- Fire OwnerCommand
+        firesignal(OwnerCommands.OnClientEvent)
+
+        -- Fire all Emotes
+        for _, emote in ipairs(emotes) do
+            EmoteVFX:FireServer(emote)
+        end
+
+        -- Control loop speed (~1000 times per second)
+        local elapsed = os.clock() - start
+        local waitTime = math.max(0, (1/2000) - elapsed)
+        task.wait(waitTime)
+    end
+end)
+
+	end,
+	DoubleClick = false,
+
+	Tooltip = "Crash server",
+	DisabledTooltip = "I am disabled!",
+
+	Disabled = false, -- Will disable the button (true / false)
+	Visible = true, -- Will make the button invisible (true / false)
+	Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
+})
 
 -- UI Settings
 local MenuGroup = Tabs["UI Settings"]:AddLeftGroupbox("Menu")
