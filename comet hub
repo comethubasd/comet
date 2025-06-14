@@ -770,8 +770,8 @@ LeftGroupBox5:AddSlider("form auto aim slider2", {
 
 local autoAimConnection -- store keybind connection to manage later
 
-LeftGroupBox5:AddToggle("form autoaim", {
-    Text = "Form autoaim",
+LeftGroupBox5:AddToggle("form autoaim u20 map", {
+    Text = "Form autoaim u20 map",
     Tooltip = "Automatically aims and shoots with Formless",
     DisabledTooltip = "This toggle is disabled",
 
@@ -891,8 +891,8 @@ local formAimZonesVisible = false
 local formAimZoneParts = {}
 local formAimUpdateLoop = nil
 
-LeftGroupBox5:AddToggle("show aim zones", {
-    Text = "Show Form Aim Zones",
+LeftGroupBox5:AddToggle("Show Form Aim Zones for u20 map", {
+    Text = "Show Form Aim Zones for u20 map",
     Default = false,
     Callback = function(Value)
         formAimZonesVisible = Value
@@ -945,7 +945,331 @@ LeftGroupBox5:AddToggle("show aim zones", {
     end
 })
 
+LeftGroupBox5:AddToggle("form autoaim tourny map", {
+    Text = "Form autoaim tourny map",
+    Tooltip = "Automatically aims and shoots with Formless",
+    DisabledTooltip = "This toggle is disabled",
+    Default = false,
+    Disabled = false,
+    Visible = true,
+    Risky = false,
 
+    Callback = function(Value)
+        if not Value then
+            if autoAimConnection then
+                autoAimConnection:Disconnect()
+                autoAimConnection = nil
+            end
+            return
+        end
+
+        local player = game.Players.LocalPlayer
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local UserInputService = game:GetService("UserInputService")
+        local box1 = workspace.Box:WaitForChild("Box1")
+        local box2 = workspace.Box:WaitForChild("Box2")
+        local ball = workspace.BallFolder:WaitForChild("Ball")
+
+        -- Exact tournament goal positions
+        local zones = {
+            Right = Vector3.new(-327 + autoaimslider1, 6 + autoaimslider2, -569),
+            Left  = Vector3.new(-327 - autoaimslider1, 6 + autoaimslider2, -8)
+        }
+
+        local function getClosestZone()
+            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            if not hrp then return nil end
+
+            local distLeft = (zones.Left - hrp.Position).Magnitude
+            local distRight = (zones.Right - hrp.Position).Magnitude
+
+            return distLeft < distRight and zones.Left or zones.Right
+        end
+
+        local function aimAt(pos)
+            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            if not hrp or not pos then return end
+
+            -- Face backward from the target position
+            local backwardPos = hrp.Position * 2 - pos
+            hrp.CFrame = CFrame.lookAt(hrp.Position, backwardPos)
+        end
+
+        local function fireFormlessShot(pos)
+            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            if not hrp or not pos then return end
+
+            local aura = player.Character:FindFirstChild("AuraColour")
+            local r = aura and aura:FindFirstChild("Red") and aura.Red.Value or 1
+            local g = aura and aura:FindFirstChild("Green") and aura.Green.Value or 1
+            local b = aura and aura:FindFirstChild("Blue") and aura.Blue.Value or 1
+
+            local shotDirection = (pos - hrp.Position).Unit
+
+            local args = {
+                [1] = shotDirection * 1.25 - hrp.CFrame.UpVector / 25,
+                [2] = -100,
+                [3] = false,
+                [4] = true,
+                [5] = false,
+                [6] = false,
+                [7] = false,
+                [9] = false,
+                [10] = Color3.new(r, g, b),
+                [11] = 40,
+                [12] = false,
+                [13] = false,
+                [14] = false,
+                [15] = false,
+                [16] = true,
+                [17] = false,
+                [18] = false
+            }
+
+            -- Fire the remote (uncomment and replace with your remote path)
+            -- ReplicatedStorage.JojoRemotes.OwnerCommands:FireServer(unpack(args))
+        end
+
+        local function runAutoAim()
+            local target = getClosestZone()
+            if target then
+                print("Aiming backward from:", target)
+                aimAt(target)
+                fireFormlessShot(target)
+            end
+        end
+
+        -- Trigger auto aim on R key press
+        autoAimConnection = UserInputService.InputBegan:Connect(function(input, gpe)
+            if not gpe and input.KeyCode == Enum.KeyCode.R then
+                runAutoAim()
+            end
+        end)
+    end,
+})
+
+
+
+local formAimZonesVisible = false
+local formAimZoneParts = {}
+local formAimUpdateLoop = nil
+
+LeftGroupBox5:AddToggle("auto Aim Zones for tourny map", {
+    Text = "auto Aim Zones for tourny map",
+    Default = false,
+    Callback = function(Value)
+        formAimZonesVisible = Value
+
+        -- Cleanup any previous parts
+        for _, part in pairs(formAimZoneParts) do
+            if part then part:Destroy() end
+        end
+        formAimZoneParts = {}
+
+        -- Stop old loop if running
+        if formAimUpdateLoop then
+            formAimUpdateLoop:Disconnect()
+            formAimUpdateLoop = nil
+        end
+
+        if not Value then return end
+
+        -- Create new parts (initially)
+        local zoneNames = { "Right Zone", "Left Zone" }
+        for i = 1, 2 do
+            local part = Instance.new("Part")
+            part.Name = zoneNames[i]
+            part.Size = Vector3.new(20, 0.5, 1)
+            part.Anchored = true
+            part.CanCollide = false
+            part.Transparency = 0.4
+            part.Material = Enum.Material.SmoothPlastic
+            part.BrickColor = BrickColor.Gray()
+            part.Position = Vector3.new(0, 0, 0) -- placeholder
+            part.Parent = workspace
+            table.insert(formAimZoneParts, part)
+        end
+
+        -- Continuous update loop every 0.1s
+        formAimUpdateLoop = game:GetService("RunService").Heartbeat:Connect(function()
+            if not formAimZonesVisible then return end
+
+            local positions = {
+                Vector3.new(-327 + autoaimslider1, 6 + autoaimslider2, -569),
+                Vector3.new(-327 - autoaimslider1, 6 + autoaimslider2, -8)
+            }
+
+            for i, part in ipairs(formAimZoneParts) do
+                if part then
+                    part.Position = positions[i] + Vector3.new(0, 2, 0)
+                end
+            end
+        end)
+    end
+})
+
+LeftGroupBox5:AddToggle("form autoaim auto map", {
+    Text = "Form autoaim auto map",
+    Tooltip = "Automatically aims and shoots with Formless",
+    DisabledTooltip = "This toggle is disabled",
+    Default = false,
+    Disabled = false,
+    Visible = true,
+    Risky = false,
+
+    Callback = function(Value)
+        if not Value then
+            if autoAimConnection then
+                autoAimConnection:Disconnect()
+                autoAimConnection = nil
+            end
+            return
+        end
+
+        local player = game.Players.LocalPlayer
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local UserInputService = game:GetService("UserInputService")
+        local box1 = workspace.Box:WaitForChild("Box1")
+        local box2 = workspace.Box:WaitForChild("Box2")
+        local ball = workspace.BallFolder:WaitForChild("Ball")
+
+        -- Exact tournament goal positions
+        local zones = {
+            Right = Vector3.new(-15 - autoaimslider1, 6 + autoaimslider2, -68),
+            Left  = Vector3.new(-15 + autoaimslider1, 6 + autoaimslider2, -522)
+        }
+
+        local function getClosestZone()
+            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            if not hrp then return nil end
+
+            local distLeft = (zones.Left - hrp.Position).Magnitude
+            local distRight = (zones.Right - hrp.Position).Magnitude
+
+            return distLeft < distRight and zones.Left or zones.Right
+        end
+
+        local function aimAt(pos)
+            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            if not hrp or not pos then return end
+
+            -- Face backward from the target position
+            local backwardPos = hrp.Position * 2 - pos
+            hrp.CFrame = CFrame.lookAt(hrp.Position, backwardPos)
+        end
+
+        local function fireFormlessShot(pos)
+            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            if not hrp or not pos then return end
+
+            local aura = player.Character:FindFirstChild("AuraColour")
+            local r = aura and aura:FindFirstChild("Red") and aura.Red.Value or 1
+            local g = aura and aura:FindFirstChild("Green") and aura.Green.Value or 1
+            local b = aura and aura:FindFirstChild("Blue") and aura.Blue.Value or 1
+
+            local shotDirection = (pos - hrp.Position).Unit
+
+            local args = {
+                [1] = shotDirection * 1.25 - hrp.CFrame.UpVector / 25,
+                [2] = -100,
+                [3] = false,
+                [4] = true,
+                [5] = false,
+                [6] = false,
+                [7] = false,
+                [9] = false,
+                [10] = Color3.new(r, g, b),
+                [11] = 40,
+                [12] = false,
+                [13] = false,
+                [14] = false,
+                [15] = false,
+                [16] = true,
+                [17] = false,
+                [18] = false
+            }
+
+            -- Fire the remote (uncomment and replace with your remote path)
+            -- ReplicatedStorage.JojoRemotes.OwnerCommands:FireServer(unpack(args))
+        end
+
+        local function runAutoAim()
+            local target = getClosestZone()
+            if target then
+                print("Aiming backward from:", target)
+                aimAt(target)
+                fireFormlessShot(target)
+            end
+        end
+
+        -- Trigger auto aim on R key press
+        autoAimConnection = UserInputService.InputBegan:Connect(function(input, gpe)
+            if not gpe and input.KeyCode == Enum.KeyCode.R then
+                runAutoAim()
+            end
+        end)
+    end,
+})
+
+
+
+local formAimZonesVisible = false
+local formAimZoneParts = {}
+local formAimUpdateLoop = nil
+
+LeftGroupBox5:AddToggle("auto Aim Zones for auto map", {
+    Text = "auto Aim Zones for auto map",
+    Default = false,
+    Callback = function(Value)
+        formAimZonesVisible = Value
+
+        -- Cleanup any previous parts
+        for _, part in pairs(formAimZoneParts) do
+            if part then part:Destroy() end
+        end
+        formAimZoneParts = {}
+
+        -- Stop old loop if running
+        if formAimUpdateLoop then
+            formAimUpdateLoop:Disconnect()
+            formAimUpdateLoop = nil
+        end
+
+        if not Value then return end
+
+        -- Create new parts (initially)
+        local zoneNames = { "Right Zone", "Left Zone" }
+        for i = 1, 2 do
+            local part = Instance.new("Part")
+            part.Name = zoneNames[i]
+            part.Size = Vector3.new(20, 0.5, 1)
+            part.Anchored = true
+            part.CanCollide = false
+            part.Transparency = 0.4
+            part.Material = Enum.Material.SmoothPlastic
+            part.BrickColor = BrickColor.Gray()
+            part.Position = Vector3.new(0, 0, 0) -- placeholder
+            part.Parent = workspace
+            table.insert(formAimZoneParts, part)
+        end
+
+        -- Continuous update loop every 0.1s
+        formAimUpdateLoop = game:GetService("RunService").Heartbeat:Connect(function()
+            if not formAimZonesVisible then return end
+
+            local positions = {
+                Vector3.new(-15 - autoaimslider1, 6 + autoaimslider2, -68),
+                Vector3.new(-15 + autoaimslider1, 6 + autoaimslider2, -522)
+            }
+
+            for i, part in ipairs(formAimZoneParts) do
+                if part then
+                    part.Position = positions[i] + Vector3.new(0, 2, 0)
+                end
+            end
+        end)
+    end
+})
 
 
 local Fps boost = LeftGroupBox5:AddButton({
