@@ -1,778 +1,992 @@
--- starting gui
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Lighting = game:GetService("Lighting")
-
-local player = Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
-
--- Ping Detection
--- Ping Detection using ServerStatsItem
-local Stats = game:GetService("Stats")
-local ping = 0
-
-task.spawn(function()
-    local pingStat = Stats.Network.ServerStatsItem and Stats.Network.ServerStatsItem:FindFirstChild("Data Ping")
-    while true do
-        if pingStat then
-            ping = math.floor(pingStat:GetValue())
-        else
-            ping = 0
-        end
-        task.wait(0.1)
-    end
-end)
-
-local repo = "https://raw.githubusercontent.com/deividcomsono/Obsidian/main/"
-local Library = loadstring(game:HttpGet(repo .. "Library.lua"))()
-local ThemeManager = loadstring(game:HttpGet(repo .. "addons/ThemeManager.lua"))()
-local SaveManager = loadstring(game:HttpGet(repo .. "addons/SaveManager.lua"))()
-
-local Options = Library.Options
-local Toggles = Library.Toggles
-
-Library.ForceCheckbox = false -- Forces AddToggle to AddCheckbox
-Library.ShowToggleFrameInKeybinds = true -- Make toggle keybinds work inside the keybinds UI (aka adds a toggle to the UI). Good for mobile users (Default value = true)
-
-local Window = Library:CreateWindow({
-	-- Set Center to true if you want the menu to appear in the center
-	-- Set AutoShow to true if you want the menu to appear when it is created
-	-- Set Resizable to true if you want to have in-game resizable Window
-	-- Set MobileButtonsSide to "Left" or "Right" if you want the ui toggle & lock buttons to be on the left or right side of the window
-	-- Set ShowCustomCursor to false if you don't want to use the Linoria cursor
-	-- NotifySide = Changes the side of the notifications (Left, Right) (Default value = Left)
-	-- Position and Size are also valid options here
-	-- but you do not need to define them unless you are changing them :)
-
-	Title = "Comet Hub",
-	Footer = "version: Rollback hub",
-	Icon = 120882999117525,
-	NotifySide = "Right",
-	ShowCustomCursor = true,
-})
-
-local Tabs = {
-	-- Creates a new tab titled Main
-	Main = Window:AddTab("Main", "user"),
-	ingame = Window:AddTab("In game", "user"),
-	["UI Settings"] = Window:AddTab("UI Settings", "settings"),
-}
-
-local LeftGroupBox = Tabs.Main:AddLeftGroupbox("Misc")
-
-
-
-local animation = LeftGroupBox:AddButton({
-	Text = "animation",
-	Func = function()
-	local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-
--- Create and load the animation
-local animation = Instance.new("Animation")
-animation.AnimationId = "rbxassetid://13857940523"
-
--- Load and play the animation
-local animator = humanoid:FindFirstChildOfClass("Animator")
-if not animator then
-    animator = Instance.new("Animator")
-    animator.Parent = humanoid
-end
-
-local animationTrack = animator:LoadAnimation(animation)
-animationTrack:Play()
-
-	end,
-	DoubleClick = false,
-
-	Tooltip = "This is the main button",
-	DisabledTooltip = "I am disabled!",
-
-	Disabled = false, -- Will disable the button (true / false)
-	Visible = true, -- Will make the button invisible (true / false)
-	Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
-})
-
-local Rollback = LeftGroupBox:AddButton({
-	Text = "Rollback",
-	Func = function()
-		local player = game.Players.LocalPlayer
-	local yen = player.Character.RankSystem.Yen
-	local args = {
-		[1] = "Right",
-		[2] = "F\255"
-	}
-	game:GetService("ReplicatedStorage"):WaitForChild("rerolls"):WaitForChild("KeybindChange"):FireServer(unpack(args))
-	task.wait(0.2)
-
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
-	end,
-	DoubleClick = false,
-
-	Tooltip = "This is the main button",
-	DisabledTooltip = "I am disabled!",
-
-	Disabled = false, -- Will disable the button (true / false)
-	Visible = true, -- Will make the button invisible (true / false)
-	Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
-})
-
-local Dupe = LeftGroupBox:AddButton({
-	Text = "Dupe second slot",
-	Func = function()
-		local plr = game.Players.LocalPlayer
-	plr.Character.Humanoid.Health = 0
-
-	task.wait(10)
-
-	game.ReplicatedStorage.rerolls.Slots:FireServer("1")
-
-	task.wait(2)
-
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
-	end,
-	DoubleClick = false,
-
-	Tooltip = "This is the main button",
-	DisabledTooltip = "I am disabled!",
-
-	Disabled = false, -- Will disable the button (true / false)
-	Visible = true, -- Will make the button invisible (true / false)
-	Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
-})
-
-local Redeem = LeftGroupBox:AddButton({
-	Text = "Redeem codes",
-	Func = function()
-		local code = game.ReplicatedStorage.SendCode
-    code:FireServer("120KFAVOURITE")
-    code:FireServer("125MILVISITS")
-    code:FireServer("DRAGONHEADER")
-    code:FireServer("150KMEMBERS")
-    code:FireServer("MEDALXLOCKED")
-    code:FireServer("10KSUBS")
-    code:FireServer("SEASON5WINNER")
-    code:FireServer("CODE")
-	end,
-	DoubleClick = false,
-
-	Tooltip = "This is the main button",
-	DisabledTooltip = "I am disabled!",
-
-	Disabled = false, -- Will disable the button (true / false)
-	Visible = true, -- Will make the button invisible (true / false)
-	Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
-})
-
-local RedeemTask = LeftGroupBox:AddButton({
-	Text = "Swap third slot",
-	Func = function()
-		
-	local ReplicatedStorage = game:GetService("ReplicatedStorage")
-	local Slots = ReplicatedStorage.rerolls.Slots -- RemoteEvent 
-
-	Slots:FireServer(
-	    "2"
-	)
-
-	end,
-	DoubleClick = false,
-
-	Tooltip = "This is the main button",
-	DisabledTooltip = "I am disabled!",
-
-	Disabled = false, -- Will disable the button (true / false)
-	Visible = true, -- Will make the button invisible (true / false)
-	Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
-})
-
-local RedeemTask = LeftGroupBox:AddButton({
-	Text = "Complete task",
-	Func = function()
-		local ReplicatedStorage = game:GetService("ReplicatedStorage")
-		local RedeemAward = ReplicatedStorage.Tasks.RedeemAward
-		for i = -12, 12 do
-    		RedeemAward:FireServer(i)
-    		task.wait(0.1) -- Optional delay to avoid spamming too fast
-		end
-	end,
-	DoubleClick = false,
-
-	Tooltip = "This is the main button",
-	DisabledTooltip = "I am disabled!",
-
-	Disabled = false, -- Will disable the button (true / false)
-	Visible = true, -- Will make the button invisible (true / false)
-	Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
-})
-
-local emotes = LeftGroupBox:AddButton({
-	Text = "get all emotes",
-	Func = function()
-	local ReplicatedStorage = game:GetService("ReplicatedStorage")
-	local ExclusiveAdd = ReplicatedStorage.Lockedtines.ExclusiveAdd -- RemoteEvent 
-
-	ExclusiveAdd:FireServer(
-    "LockedtinesEmotepack"
-	)
-	ExclusiveAdd:FireServer(
-    	"IsagiPack"
-	)
-	ExclusiveAdd:FireServer(
-    "BarouPack"
-	)
-	ExclusiveAdd:FireServer(
-    "ReoPack"
-	)
-
-	
-	end,
-	DoubleClick = false,
-
-	Tooltip = "This is the main button",
-	DisabledTooltip = "I am disabled!",
-
-	Disabled = false, -- Will disable the button (true / false)
-	Visible = true, -- Will make the button invisible (true / false)
-	Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
-})
-
-local RightGroupbox = Tabs.Main:AddRightGroupbox("Auto Roll")
-
-local getWeaponSelection = "na"
-local getTraitSelection = "na"
-
-
-RightGroupbox:AddDropdown("Weapon", {
-	Values = { "Accelerate", "Acrobatic", "AceEater", "Chigiri", "CopyCat", "DirectShot", "Emperor", "Formless",
-    "GodSpeed", "IronHead", "King", "Kunigami", "Leader", "LongLegs", "Monster", "Nagi", "Neurotic",
-    "Planetary", "Repel", "Riptide", "Rough", "Serpent", "Shadow", "Snatch", "SwordScrew", "Updraft",
-    "Voracious", "WatchTower", "Web" },
-	Default = 0, -- number index of the value / string
-	Multi = false, -- true / false, allows multiple choices to be selected
-
-	Text = "Search Weapon",
-	Tooltip = "This is a tooltip", -- Information shown when you hover over the dropdown
-	DisabledTooltip = "I am disabled!", -- Information shown when you hover over the dropdown while it's disabled
-
-	Searchable = true, -- true / false, makes the dropdown searchable (great for a long list of values)
-
-	Callback = function(Value)
-        getWeaponSelection = Value
-		print("Weapon got changed. New value:", getWeaponSelection)
-	end,
-
-	Disabled = false, -- Will disable the dropdown (true / false)
-	Visible = true, -- Will make the dropdown invisible (true / false)
-})
-
-RightGroupbox:AddToggle("weapon roll", {
-	Text = "Auto roll weapon",
-	Tooltip = "Automatically rerolls until desired weapon is found",
-	DisabledTooltip = "This toggle is disabled",
-
-	Default = false,
-	Disabled = false,
-	Visible = true,
-	Risky = false,
-
-	Callback = function(Value)
-	if Value then
-		task.spawn(function()
-			while Toggles["weapon roll"].Value do
-				local weapontofind = getWeaponSelection
-				if not weapontofind or weapontofind == "na" then break end
-
-				local foundWeapon = player.Backpack:FindFirstChildWhichIsA("ValueBase")
-				local hasWeapon = foundWeapon and foundWeapon.Name == weapontofind
-
-				if hasWeapon then 
-				print("weapon found")
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
-				break
-				end
-
-				if player.Character.RankSystem.Yen.Value < tonumber(Options.minyen.Value) then
-					-- Run rollback teleport
-					local args = {
-						[1] = "Right",
-						[2] = "F\255"
-					}
-					ReplicatedStorage:WaitForChild("rerolls"):WaitForChild("KeybindChange"):FireServer(unpack(args))
-					task.wait(0.2)
-
-					loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
-					break
-				end
-
-				ReplicatedStorage.rerolls.specreroll:FireServer(2)
-				task.wait(ping / 1000)
-			end
-		end)
-	end
-end,
-})
-
-RightGroupbox:AddDropdown("trait", {
-	Values = { "Ambidextrous", "Athlete", "Bunnys", "Calculate", "Clamps", "Claw", "Consistent", "Destruction", "Diver", "Dragon", "Egoist", "Fortune", "GoldenZone",
-    "LongStrides", "Metavision", "NoLook", "Powerhouse", "Puppeteer", "QuickDraw", "Revolver", "Ripper",
-    "Surf", "Tank", "Tireless", "TwinGuns", "Unbreakable" },
-	Default = 0, -- number index of the value / string
-	Multi = false, -- true / false, allows multiple choices to be selected
-
-	Text = "Search trait",
-	Tooltip = "This is a tooltip", -- Information shown when you hover over the dropdown
-	DisabledTooltip = "I am disabled!", -- Information shown when you hover over the dropdown while it's disabled
-
-	Searchable = true, -- true / false, makes the dropdown searchable (great for a long list of values)
-
-	Callback = function(Value)
-        getTraitSelection = Value
-		print("Trait got changed. New value:", getTraitSelection)
-	end,
-
-	Disabled = false, -- Will disable the dropdown (true / false)
-	Visible = true, -- Will make the dropdown invisible (true / false)
-})
-
-
-RightGroupbox:AddToggle("trait roll", {
-	Text = "Auto roll Trait",
-	Tooltip = "This is a tooltip",
-	DisabledTooltip = "I am disabled!",
-	Default = false,
-	Disabled = false,
-	Visible = true,
-	Risky = false,
-
-	Callback = function(Value)
-	if Value then
-		task.spawn(function()
-			local traittofind = getTraitSelection
-			if not traittofind or traittofind == "na" then return end
-
-			while Toggles["trait roll"].Value do
-				local traitFolder = player.Backpack:FindFirstChild("Trait")
-				local foundTrait = traitFolder and traitFolder:FindFirstChildWhichIsA("ValueBase")
-				local hasTrait = foundTrait and foundTrait.Name == traittofind
-
-				if hasTrait then 
-				print("Trait found")
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
-				break
-				end
-
-				if player.Character.RankSystem.Yen.Value < tonumber(Options.minyen.Value) then
-					-- Run rollback teleport
-					local args = {
-						[1] = "Right",
-						[2] = "F\255"
-					}
-					ReplicatedStorage:WaitForChild("rerolls"):WaitForChild("KeybindChange"):FireServer(unpack(args))
-					task.wait(0.2)
-
-					
-					loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
-					break
-				end
-
-				ReplicatedStorage.rerolls.traitreroll:FireServer(2)
-				task.wait(ping / 1000)
-			end
-		end)
-	end
-end,
-})
-
-local minimYen = 3000
-
-RightGroupbox:AddInput("minyen", {
-	Default = 3000,
-	Numeric = true, -- true / false, only allows numbers
-	Finished = false, -- true / false, only calls callback when you press enter
-	ClearTextOnFocus = true, -- true / false, if false the text will not clear when textbox focused
-
-	Text = "Minimum yen",
-	Tooltip = "This is a tooltip", -- Information shown when you hover over the textbox
-
-	Placeholder = "...", -- placeholder text when the box is empty
-	-- MaxLength is also an option which is the max length of the text
-
-	Callback = function(Value)
-		minimYen = Value
-	end,
-})
-
-
-
-local LeftGroupbox2 = Tabs.Main:AddLeftGroupbox("Current stuff")
-local yen = player.Character.RankSystem.Yen
-local flow1 = player.Character.AuraColour.Buff.value
-local flow2 = player.Character.AuraColour.Buff:GetAttribute("BuffValue")
-
-pingLabel = LeftGroupbox2:AddLabel("Current Ping: ...")
-LeftGroupbox2:AddLabel("note the lower your")
-LeftGroupbox2:AddLabel("ping the faster you spin")
-weaponLabel = LeftGroupbox2:AddLabel("Current Weapon: ...")
-traitLabel = LeftGroupbox2:AddLabel("Current Trait: ...")
-yenLabel = LeftGroupbox2:AddLabel("Yen: ...")
-flow1Label = LeftGroupbox2:AddLabel("Flow type: ...")
-flow2Label = LeftGroupbox2:AddLabel("Flow buff: ...")
-
-
--- Update Labels Loop
-task.spawn(function()
-    while true do
-        -- Update Ping
-        pingLabel:SetText("Current Ping: " .. ping .. "ms")
-        
-        -- Update Ability
-        local currentAbility = "N/A"
-        for _, val in ipairs(player.Backpack:GetChildren()) do
-            if val:IsA("NumberValue") then
-                currentAbility = val.Name
-                break
+    -- starting gui
+    local Players = game:GetService("Players")
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local Lighting = game:GetService("Lighting")
+
+    local player = Players.LocalPlayer
+    local playerGui = player:WaitForChild("PlayerGui")
+
+    -- Ping Detection
+    -- Ping Detection using ServerStatsItem
+    local Stats = game:GetService("Stats")
+    local ping = 0
+
+    task.spawn(function()
+        local pingStat = Stats.Network.ServerStatsItem and Stats.Network.ServerStatsItem:FindFirstChild("Data Ping")
+        while true do
+            if pingStat then
+                ping = math.floor(pingStat:GetValue())
+            else
+                ping = 0
             end
+            task.wait(0.1)
         end
-        weaponLabel:SetText("Current Weapon: " .. currentAbility)
+    end)
 
-        -- Update Trait
-        local currentTrait = "N/A"
-        local traitFolder = player.Backpack:FindFirstChild("Trait")
-        if traitFolder then
-            for _, trait in ipairs(traitFolder:GetChildren()) do
-                if trait:IsA("ValueBase") then
-                    currentTrait = trait.Name
+    local repo = "https://raw.githubusercontent.com/deividcomsono/Obsidian/main/"
+    local Library = loadstring(game:HttpGet(repo .. "Library.lua"))()
+    local ThemeManager = loadstring(game:HttpGet(repo .. "addons/ThemeManager.lua"))()
+    local SaveManager = loadstring(game:HttpGet(repo .. "addons/SaveManager.lua"))()
+
+    local Options = Library.Options
+    local Toggles = Library.Toggles
+
+    Library.ForceCheckbox = false -- Forces AddToggle to AddCheckbox
+    Library.ShowToggleFrameInKeybinds = true -- Make toggle keybinds work inside the keybinds UI (aka adds a toggle to the UI). Good for mobile users (Default value = true)
+
+    local Window = Library:CreateWindow({
+        -- Set Center to true if you want the menu to appear in the center
+        -- Set AutoShow to true if you want the menu to appear when it is created
+        -- Set Resizable to true if you want to have in-game resizable Window
+        -- Set MobileButtonsSide to "Left" or "Right" if you want the ui toggle & lock buttons to be on the left or right side of the window
+        -- Set ShowCustomCursor to false if you don't want to use the Linoria cursor
+        -- NotifySide = Changes the side of the notifications (Left, Right) (Default value = Left)
+        -- Position and Size are also valid options here
+        -- but you do not need to define them unless you are changing them :)
+
+        Title = "Comet Hub",
+        Footer = "version: Rollback hub",
+        Icon = 120882999117525,
+        NotifySide = "Right",
+        ShowCustomCursor = true,
+    })
+
+    local Tabs = {
+        -- Creates a new tab titled Main
+        Main = Window:AddTab("Main", "user"),
+        ingame = Window:AddTab("In game", "user"),
+        ["UI Settings"] = Window:AddTab("UI Settings", "settings"),
+    }
+
+    local LeftGroupBox = Tabs.Main:AddLeftGroupbox("Misc")
+
+
+
+    local animation = LeftGroupBox:AddButton({
+        Text = "animation",
+        Func = function()
+        local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+
+    -- Create and load the animation
+    local animation = Instance.new("Animation")
+    animation.AnimationId = "rbxassetid://13857940523"
+
+    -- Load and play the animation
+    local animator = humanoid:FindFirstChildOfClass("Animator")
+    if not animator then
+        animator = Instance.new("Animator")
+        animator.Parent = humanoid
+    end
+
+    local animationTrack = animator:LoadAnimation(animation)
+    animationTrack:Play()
+
+        end,
+        DoubleClick = false,
+
+        Tooltip = "This is the main button",
+        DisabledTooltip = "I am disabled!",
+
+        Disabled = false, -- Will disable the button (true / false)
+        Visible = true, -- Will make the button invisible (true / false)
+        Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
+    })
+
+    local Rollback = LeftGroupBox:AddButton({
+        Text = "Rollback",
+        Func = function()
+            local player = game.Players.LocalPlayer
+        local yen = player.Character.RankSystem.Yen
+        local args = {
+            [1] = "Right",
+            [2] = "F\255"
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("rerolls"):WaitForChild("KeybindChange"):FireServer(unpack(args))
+        task.wait(0.2)
+
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
+        end,
+        DoubleClick = false,
+
+        Tooltip = "This is the main button",
+        DisabledTooltip = "I am disabled!",
+
+        Disabled = false, -- Will disable the button (true / false)
+        Visible = true, -- Will make the button invisible (true / false)
+        Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
+    })
+
+    local Dupe = LeftGroupBox:AddButton({
+        Text = "Dupe second slot",
+        Func = function()
+            local plr = game.Players.LocalPlayer
+        plr.Character.Humanoid.Health = 0
+
+        task.wait(10)
+
+        game.ReplicatedStorage.rerolls.Slots:FireServer("1")
+
+        task.wait(2)
+
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
+        end,
+        DoubleClick = false,
+
+        Tooltip = "This is the main button",
+        DisabledTooltip = "I am disabled!",
+
+        Disabled = false, -- Will disable the button (true / false)
+        Visible = true, -- Will make the button invisible (true / false)
+        Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
+    })
+
+    local Redeem = LeftGroupBox:AddButton({
+        Text = "Redeem codes",
+        Func = function()
+            local code = game.ReplicatedStorage.SendCode
+        code:FireServer("120KFAVOURITE")
+        code:FireServer("125MILVISITS")
+        code:FireServer("DRAGONHEADER")
+        code:FireServer("150KMEMBERS")
+        code:FireServer("MEDALXLOCKED")
+        code:FireServer("10KSUBS")
+        code:FireServer("SEASON5WINNER")
+        code:FireServer("CODE")
+        end,
+        DoubleClick = false,
+
+        Tooltip = "This is the main button",
+        DisabledTooltip = "I am disabled!",
+
+        Disabled = false, -- Will disable the button (true / false)
+        Visible = true, -- Will make the button invisible (true / false)
+        Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
+    })
+
+    local RedeemTask = LeftGroupBox:AddButton({
+        Text = "Swap third slot",
+        Func = function()
+            
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local Slots = ReplicatedStorage.rerolls.Slots -- RemoteEvent 
+
+        Slots:FireServer(
+            "2"
+        )
+
+        end,
+        DoubleClick = false,
+
+        Tooltip = "This is the main button",
+        DisabledTooltip = "I am disabled!",
+
+        Disabled = false, -- Will disable the button (true / false)
+        Visible = true, -- Will make the button invisible (true / false)
+        Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
+    })
+
+    local RedeemTask = LeftGroupBox:AddButton({
+        Text = "Complete task",
+        Func = function()
+            local ReplicatedStorage = game:GetService("ReplicatedStorage")
+            local RedeemAward = ReplicatedStorage.Tasks.RedeemAward
+            for i = -12, 12 do
+                RedeemAward:FireServer(i)
+                task.wait(0.1) -- Optional delay to avoid spamming too fast
+            end
+        end,
+        DoubleClick = false,
+
+        Tooltip = "This is the main button",
+        DisabledTooltip = "I am disabled!",
+
+        Disabled = false, -- Will disable the button (true / false)
+        Visible = true, -- Will make the button invisible (true / false)
+        Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
+    })
+
+    local emotes = LeftGroupBox:AddButton({
+        Text = "get all emotes",
+        Func = function()
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local ExclusiveAdd = ReplicatedStorage.Lockedtines.ExclusiveAdd -- RemoteEvent 
+
+        ExclusiveAdd:FireServer(
+        "LockedtinesEmotepack"
+        )
+        ExclusiveAdd:FireServer(
+            "IsagiPack"
+        )
+        ExclusiveAdd:FireServer(
+        "BarouPack"
+        )
+        ExclusiveAdd:FireServer(
+        "ReoPack"
+        )
+
+        
+        end,
+        DoubleClick = false,
+
+        Tooltip = "This is the main button",
+        DisabledTooltip = "I am disabled!",
+
+        Disabled = false, -- Will disable the button (true / false)
+        Visible = true, -- Will make the button invisible (true / false)
+        Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
+    })
+
+    local RightGroupbox = Tabs.Main:AddRightGroupbox("Auto Roll")
+
+    local getWeaponSelection = "na"
+    local getTraitSelection = "na"
+
+
+    RightGroupbox:AddDropdown("Weapon", {
+        Values = { "Accelerate", "Acrobatic", "AceEater", "Chigiri", "CopyCat", "DirectShot", "Emperor", "Formless",
+        "GodSpeed", "IronHead", "King", "Kunigami", "Leader", "LongLegs", "Monster", "Nagi", "Neurotic",
+        "Planetary", "Repel", "Riptide", "Rough", "Serpent", "Shadow", "Snatch", "SwordScrew", "Updraft",
+        "Voracious", "WatchTower", "Web" },
+        Default = 0, -- number index of the value / string
+        Multi = false, -- true / false, allows multiple choices to be selected
+
+        Text = "Search Weapon",
+        Tooltip = "This is a tooltip", -- Information shown when you hover over the dropdown
+        DisabledTooltip = "I am disabled!", -- Information shown when you hover over the dropdown while it's disabled
+
+        Searchable = true, -- true / false, makes the dropdown searchable (great for a long list of values)
+
+        Callback = function(Value)
+            getWeaponSelection = Value
+            print("Weapon got changed. New value:", getWeaponSelection)
+        end,
+
+        Disabled = false, -- Will disable the dropdown (true / false)
+        Visible = true, -- Will make the dropdown invisible (true / false)
+    })
+
+    RightGroupbox:AddToggle("weapon roll", {
+        Text = "Auto roll weapon",
+        Tooltip = "Automatically rerolls until desired weapon is found",
+        DisabledTooltip = "This toggle is disabled",
+
+        Default = false,
+        Disabled = false,
+        Visible = true,
+        Risky = false,
+
+        Callback = function(Value)
+        if Value then
+            task.spawn(function()
+                while Toggles["weapon roll"].Value do
+                    local weapontofind = getWeaponSelection
+                    if not weapontofind or weapontofind == "na" then break end
+
+                    local foundWeapon = player.Backpack:FindFirstChildWhichIsA("ValueBase")
+                    local hasWeapon = foundWeapon and foundWeapon.Name == weapontofind
+
+                    if hasWeapon then 
+                    print("weapon found")
+                    loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
+                    break
+                    end
+
+                    if player.Character.RankSystem.Yen.Value < tonumber(Options.minyen.Value) then
+                        -- Run rollback teleport
+                        local args = {
+                            [1] = "Right",
+                            [2] = "F\255"
+                        }
+                        ReplicatedStorage:WaitForChild("rerolls"):WaitForChild("KeybindChange"):FireServer(unpack(args))
+                        task.wait(0.2)
+
+                        loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
+                        break
+                    end
+
+                    ReplicatedStorage.rerolls.specreroll:FireServer(2)
+                    task.wait(ping / 1000)
+                end
+            end)
+        end
+    end,
+    })
+
+    RightGroupbox:AddDropdown("trait", {
+        Values = { "Ambidextrous", "Athlete", "Bunnys", "Calculate", "Clamps", "Claw", "Consistent", "Destruction", "Diver", "Dragon", "Egoist", "Fortune", "GoldenZone",
+        "LongStrides", "Metavision", "NoLook", "Powerhouse", "Puppeteer", "QuickDraw", "Revolver", "Ripper",
+        "Surf", "Tank", "Tireless", "TwinGuns", "Unbreakable" },
+        Default = 0, -- number index of the value / string
+        Multi = false, -- true / false, allows multiple choices to be selected
+
+        Text = "Search trait",
+        Tooltip = "This is a tooltip", -- Information shown when you hover over the dropdown
+        DisabledTooltip = "I am disabled!", -- Information shown when you hover over the dropdown while it's disabled
+
+        Searchable = true, -- true / false, makes the dropdown searchable (great for a long list of values)
+
+        Callback = function(Value)
+            getTraitSelection = Value
+            print("Trait got changed. New value:", getTraitSelection)
+        end,
+
+        Disabled = false, -- Will disable the dropdown (true / false)
+        Visible = true, -- Will make the dropdown invisible (true / false)
+    })
+
+
+    RightGroupbox:AddToggle("trait roll", {
+        Text = "Auto roll Trait",
+        Tooltip = "This is a tooltip",
+        DisabledTooltip = "I am disabled!",
+        Default = false,
+        Disabled = false,
+        Visible = true,
+        Risky = false,
+
+        Callback = function(Value)
+        if Value then
+            task.spawn(function()
+                local traittofind = getTraitSelection
+                if not traittofind or traittofind == "na" then return end
+
+                while Toggles["trait roll"].Value do
+                    local traitFolder = player.Backpack:FindFirstChild("Trait")
+                    local foundTrait = traitFolder and traitFolder:FindFirstChildWhichIsA("ValueBase")
+                    local hasTrait = foundTrait and foundTrait.Name == traittofind
+
+                    if hasTrait then 
+                    print("Trait found")
+                    loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
+                    break
+                    end
+
+                    if player.Character.RankSystem.Yen.Value < tonumber(Options.minyen.Value) then
+                        -- Run rollback teleport
+                        local args = {
+                            [1] = "Right",
+                            [2] = "F\255"
+                        }
+                        ReplicatedStorage:WaitForChild("rerolls"):WaitForChild("KeybindChange"):FireServer(unpack(args))
+                        task.wait(0.2)
+
+                        
+                        loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
+                        break
+                    end
+
+                    ReplicatedStorage.rerolls.traitreroll:FireServer(2)
+                    task.wait(ping / 1000)
+                end
+            end)
+        end
+    end,
+    })
+
+    local minimYen = 3000
+
+    RightGroupbox:AddInput("minyen", {
+        Default = 3000,
+        Numeric = true, -- true / false, only allows numbers
+        Finished = false, -- true / false, only calls callback when you press enter
+        ClearTextOnFocus = true, -- true / false, if false the text will not clear when textbox focused
+
+        Text = "Minimum yen",
+        Tooltip = "This is a tooltip", -- Information shown when you hover over the textbox
+
+        Placeholder = "...", -- placeholder text when the box is empty
+        -- MaxLength is also an option which is the max length of the text
+
+        Callback = function(Value)
+            minimYen = Value
+        end,
+    })
+
+
+
+    local LeftGroupbox2 = Tabs.Main:AddLeftGroupbox("Current stuff")
+    local yen = player.Character.RankSystem.Yen
+    local flow1 = player.Character.AuraColour.Buff.value
+    local flow2 = player.Character.AuraColour.Buff:GetAttribute("BuffValue")
+
+    pingLabel = LeftGroupbox2:AddLabel("Current Ping: ...")
+    LeftGroupbox2:AddLabel("note the lower your")
+    LeftGroupbox2:AddLabel("ping the faster you spin")
+    weaponLabel = LeftGroupbox2:AddLabel("Current Weapon: ...")
+    traitLabel = LeftGroupbox2:AddLabel("Current Trait: ...")
+    yenLabel = LeftGroupbox2:AddLabel("Yen: ...")
+    flow1Label = LeftGroupbox2:AddLabel("Flow type: ...")
+    flow2Label = LeftGroupbox2:AddLabel("Flow buff: ...")
+
+
+    -- Update Labels Loop
+    task.spawn(function()
+        while true do
+            -- Update Ping
+            pingLabel:SetText("Current Ping: " .. ping .. "ms")
+            
+            -- Update Ability
+            local currentAbility = "N/A"
+            for _, val in ipairs(player.Backpack:GetChildren()) do
+                if val:IsA("NumberValue") then
+                    currentAbility = val.Name
                     break
                 end
             end
+            weaponLabel:SetText("Current Weapon: " .. currentAbility)
+
+            -- Update Trait
+            local currentTrait = "N/A"
+            local traitFolder = player.Backpack:FindFirstChild("Trait")
+            if traitFolder then
+                for _, trait in ipairs(traitFolder:GetChildren()) do
+                    if trait:IsA("ValueBase") then
+                        currentTrait = trait.Name
+                        break
+                    end
+                end
+            end
+            traitLabel:SetText("Current Trait: " .. currentTrait)
+
+            yen = player.Character.RankSystem.Yen.value
+            yenLabel:SetText("Yen: " .. yen)
+
+            flow1 = player.Character.AuraColour.Buff.value
+            flow2 = player.Character.AuraColour.Buff:GetAttribute("BuffValue") * 10
+            flow1Label:SetText("Flow type: " .. flow1)
+            flow2Label:SetText("Flow buff: " .. flow2)
+            task.wait(0.02)
         end
-        traitLabel:SetText("Current Trait: " .. currentTrait)
-
-		yen = player.Character.RankSystem.Yen.value
-		yenLabel:SetText("Yen: " .. yen)
-
-		flow1 = player.Character.AuraColour.Buff.value
-		flow2 = player.Character.AuraColour.Buff:GetAttribute("BuffValue") * 10
-		flow1Label:SetText("Flow type: " .. flow1)
-		flow2Label:SetText("Flow buff: " .. flow2)
-        task.wait(0.02)
-    end
-end)
+    end)
 
 
-local RightGroupbox2 = Tabs.Main:AddRightGroupbox("Flow")
+    local RightGroupbox2 = Tabs.Main:AddRightGroupbox("Flow")
 
-local buff = 1
-local flowtype = "speed"
+    local buff = 1
+    local flowtype = "speed"
 
-RightGroupbox2:AddDropdown("type", {
-	Values = { "speed", "power", "hitbox", "cooldown", "stamina" },
-	Default = 0, -- number index of the value / string
-	Multi = false, -- true / false, allows multiple choices to be selected
+    RightGroupbox2:AddDropdown("type", {
+        Values = { "speed", "power", "hitbox", "cooldown", "stamina" },
+        Default = 0, -- number index of the value / string
+        Multi = false, -- true / false, allows multiple choices to be selected
 
-	Text = "Search flow type",
-	Tooltip = "This is a tooltip", -- Information shown when you hover over the dropdown
-	DisabledTooltip = "I am disabled!", -- Information shown when you hover over the dropdown while it's disabled
+        Text = "Search flow type",
+        Tooltip = "This is a tooltip", -- Information shown when you hover over the dropdown
+        DisabledTooltip = "I am disabled!", -- Information shown when you hover over the dropdown while it's disabled
 
-	Searchable = true, -- true / false, makes the dropdown searchable (great for a long list of values)
+        Searchable = true, -- true / false, makes the dropdown searchable (great for a long list of values)
 
-	Callback = function(Value)
-        flowtype = Value
-		print("flow type is now", flowtype)
-	end,
+        Callback = function(Value)
+            flowtype = Value
+            print("flow type is now", flowtype)
+        end,
 
-	Disabled = false, -- Will disable the dropdown (true / false)
-	Visible = true, -- Will make the dropdown invisible (true / false)
-})
+        Disabled = false, -- Will disable the dropdown (true / false)
+        Visible = true, -- Will make the dropdown invisible (true / false)
+    })
 
-RightGroupbox2:AddSlider("buff", {
-	Text = "Buff percentage",
-	Default = 10,
-	Min = 5,
-	Max = 15,
-	Rounding = 1,
-	Compact = false,
+    RightGroupbox2:AddSlider("buff", {
+        Text = "Buff percentage",
+        Default = 10,
+        Min = 5,
+        Max = 15,
+        Rounding = 1,
+        Compact = false,
 
-	Callback = function(Value)
-		buff = Value / 10 - .006
-		print("buff is now:", Value)
-	end,
+        Callback = function(Value)
+            buff = Value / 10 - .006
+            print("buff is now:", Value)
+        end,
 
-	Tooltip = "I am a slider!", -- Information shown when you hover over the slider
-	DisabledTooltip = "I am disabled!", -- Information shown when you hover over the slider while it's disabled
+        Tooltip = "I am a slider!", -- Information shown when you hover over the slider
+        DisabledTooltip = "I am disabled!", -- Information shown when you hover over the slider while it's disabled
 
-	Disabled = false, -- Will disable the slider (true / false)
-	Visible = true, -- Will make the slider invisible (true / false)
-})
-RightGroupbox2:AddToggle("Flow buff Roll", {
-	Text = "Auto roll flow",
-	Tooltip = "Automatically rerolls until desired flow is found",
+        Disabled = false, -- Will disable the slider (true / false)
+        Visible = true, -- Will make the slider invisible (true / false)
+    })
+    RightGroupbox2:AddToggle("Flow buff Roll", {
+        Text = "Auto roll flow",
+        Tooltip = "Automatically rerolls until desired flow is found",
 
-	Default = false,
-	Callback = function(Value)
-		if Value then
-			task.spawn(function()
-				while Toggles["Flow buff Roll"] and Toggles["Flow buff Roll"].Value do
-					local shouldStop = false
-					local shouldHop = false
-					local shouldRoll = true
+        Default = false,
+        Callback = function(Value)
+            if Value then
+                task.spawn(function()
+                    while Toggles["Flow buff Roll"] and Toggles["Flow buff Roll"].Value do
+                        local shouldStop = false
+                        local shouldHop = false
+                        local shouldRoll = true
 
-					local success, err = pcall(function()
-						local character = player.Character
-						if not character then return end
+                        local success, err = pcall(function()
+                            local character = player.Character
+                            if not character then return end
 
-						local aura = character:FindFirstChild("AuraColour")
-						if not aura then return end
+                            local aura = character:FindFirstChild("AuraColour")
+                            if not aura then return end
 
-						local buffObj = aura:FindFirstChild("Buff")
-						if not buffObj then return end
+                            local buffObj = aura:FindFirstChild("Buff")
+                            if not buffObj then return end
 
-						local currentType = buffObj.Value
-						local buffPercent = (buffObj:GetAttribute("BuffValue") or 0)
+                            local currentType = buffObj.Value
+                            local buffPercent = (buffObj:GetAttribute("BuffValue") or 0)
 
-						local selectedType = flowtype
-						local minBuff = buff
+                            local selectedType = flowtype
+                            local minBuff = buff
 
-						-- ✅ Already has correct flow and buff
-						if currentType == selectedType and buffPercent >= minBuff then
-							print("Player already has desired Flow and Buff. Stopping auto-roll.")
-							shouldRoll = false
-							shouldStop = true
-							return
-						end
+                            -- ✅ Already has correct flow and buff
+                            if currentType == selectedType and buffPercent >= minBuff then
+                                print("Player already has desired Flow and Buff. Stopping auto-roll.")
+                                shouldRoll = false
+                                shouldStop = true
+                                return
+                            end
 
-						-- ❌ Not enough Yen
-						if player.Character:FindFirstChild("RankSystem") and player.Character.RankSystem:FindFirstChild("Yen") then
-							local currentYen = player.Character.RankSystem.Yen.Value
-							if currentYen < tonumber(Options.minyen.Value) then
-								print("Not enough Yen, rolling back + hopping")
-								
-								-- Rollback teleport
-								local args = {
-									[1] = "Right",
-									[2] = "F\255"
-								}
-								game.ReplicatedStorage:WaitForChild("rerolls"):WaitForChild("KeybindChange"):FireServer(unpack(args))
-								task.wait(0.2)
+                            -- ❌ Not enough Yen
+                            if player.Character:FindFirstChild("RankSystem") and player.Character.RankSystem:FindFirstChild("Yen") then
+                                local currentYen = player.Character.RankSystem.Yen.Value
+                                if currentYen < tonumber(Options.minyen.Value) then
+                                    print("Not enough Yen, rolling back + hopping")
+                                    
+                                    -- Rollback teleport
+                                    local args = {
+                                        [1] = "Right",
+                                        [2] = "F\255"
+                                    }
+                                    game.ReplicatedStorage:WaitForChild("rerolls"):WaitForChild("KeybindChange"):FireServer(unpack(args))
+                                    task.wait(0.2)
 
-								shouldStop = true
-								shouldHop = true
-								return
-							end
-						end
-					end)
+                                    shouldStop = true
+                                    shouldHop = true
+                                    return
+                                end
+                            end
+                        end)
 
-					if not success then
-						warn("Flow Auto Roll error:", err)
-					end
+                        if not success then
+                            warn("Flow Auto Roll error:", err)
+                        end
 
-					if shouldRoll then
-						game.ReplicatedStorage.rerolls.buffreroll:FireServer()
-					end
+                        if shouldRoll then
+                            game.ReplicatedStorage.rerolls.buffreroll:FireServer()
+                        end
 
-					if shouldHop then
-						loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
-					end
+                        if shouldHop then
+                            loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
+                        end
 
-					if shouldStop then break end
-					task.wait(ping / 1000)
-				end
-			end)
-		end
-	end
-})
+                        if shouldStop then break end
+                        task.wait(ping / 1000)
+                    end
+                end)
+            end
+        end
+    })
 
 
 
 
-local LeftGroupBox5 = Tabs.ingame:AddLeftGroupbox("Auto Flick")
+    local LeftGroupBox5 = Tabs.ingame:AddLeftGroupbox("Auto Flick")
 
-local shootPower = 10.5
-local shootAngle = 70
+    local shootPower = 10.5
+    local shootAngle = 70
 
-LeftGroupBox5:AddSlider("flick power", {
-	Text = "flick power",
-	Default = 10.5,
-	Min = 10.5,
-	Max = 12,
-	Rounding = 1,
-	Compact = false,
+    LeftGroupBox5:AddSlider("flick power", {
+        Text = "flick power",
+        Default = 10.5,
+        Min = 10.5,
+        Max = 12,
+        Rounding = 1,
+        Compact = false,
 
-	Callback = function(Value)
-		shootPower = Value
-	end,
+        Callback = function(Value)
+            shootPower = Value
+        end,
 
-	Tooltip = "I am a slider!", -- Information shown when you hover over the slider
-	DisabledTooltip = "I am disabled!", -- Information shown when you hover over the slider while it's disabled
+        Tooltip = "I am a slider!", -- Information shown when you hover over the slider
+        DisabledTooltip = "I am disabled!", -- Information shown when you hover over the slider while it's disabled
 
-	Disabled = false, -- Will disable the slider (true / false)
-	Visible = true, -- Will make the slider invisible (true / false)
-})
+        Disabled = false, -- Will disable the slider (true / false)
+        Visible = true, -- Will make the slider invisible (true / false)
+    })
 
-LeftGroupBox5:AddSlider("flick Angle", {
-	Text = "flick Angle",
-	Default = 70,
-	Min = 40,
-	Max = 80,
-	Rounding = 1,
-	Compact = false,
+    LeftGroupBox5:AddSlider("flick Angle", {
+        Text = "flick Angle",
+        Default = 70,
+        Min = 40,
+        Max = 80,
+        Rounding = 1,
+        Compact = false,
 
-	Callback = function(Value)
-		shootAngle = Value
-	end,
+        Callback = function(Value)
+            shootAngle = Value
+        end,
 
-	Tooltip = "I am a slider!", -- Information shown when you hover over the slider
-	DisabledTooltip = "I am disabled!", -- Information shown when you hover over the slider while it's disabled
+        Tooltip = "I am a slider!", -- Information shown when you hover over the slider
+        DisabledTooltip = "I am disabled!", -- Information shown when you hover over the slider while it's disabled
 
-	Disabled = false, -- Will disable the slider (true / false)
-	Visible = true, -- Will make the slider invisible (true / false)
-})
+        Disabled = false, -- Will disable the slider (true / false)
+        Visible = true, -- Will make the slider invisible (true / false)
+    })
 
-local shootConnection -- Declared outside to persist
+    local shootConnection -- Declared outside to persist
 
-LeftGroupBox5:AddToggle("Auto flick", {
-    Text = "Auto flick",
-    Tooltip = "ts is form auto aim twin",
-    DisabledTooltip = "This toggle is disabled",
+    LeftGroupBox5:AddToggle("Auto flick", {
+        Text = "Auto flick",
+        Tooltip = "ts is form auto aim twin",
+        DisabledTooltip = "This toggle is disabled",
 
-    Default = false,
-    Disabled = false,
-    Visible = true,
-    Risky = false,
+        Default = false,
+        Disabled = false,
+        Visible = true,
+        Risky = false,
 
-    Callback = function(Value)
-        local UserInputService = game:GetService("UserInputService")
-        local ReplicatedStorage = game:GetService("ReplicatedStorage")
-        local Players = game:GetService("Players")
-        local player = Players.LocalPlayer
-        local character = player.Character or player.CharacterAdded:Wait()
-        local humanoid = character:WaitForChild("Humanoid")
-
-        local function shoot()
+        Callback = function(Value)
+            local UserInputService = game:GetService("UserInputService")
+            local ReplicatedStorage = game:GetService("ReplicatedStorage")
+            local Players = game:GetService("Players")
+            local player = Players.LocalPlayer
             local character = player.Character or player.CharacterAdded:Wait()
-            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+            local humanoid = character:WaitForChild("Humanoid")
 
-            local forward = humanoidRootPart.CFrame.LookVector
+            local function shoot()
+                local character = player.Character or player.CharacterAdded:Wait()
+                local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
-            local animation = Instance.new("Animation")
-            animation.AnimationId = "rbxassetid://12830711336"
+                local forward = humanoidRootPart.CFrame.LookVector
 
-            local animator = humanoid:FindFirstChildOfClass("Animator")
-            if not animator then
-                animator = Instance.new("Animator")
-                animator.Parent = humanoid
+                local animation = Instance.new("Animation")
+                animation.AnimationId = "rbxassetid://12830711336"
+
+                local animator = humanoid:FindFirstChildOfClass("Animator")
+                if not animator then
+                    animator = Instance.new("Animator")
+                    animator.Parent = humanoid
+                end
+
+                local animationTrack = animator:LoadAnimation(animation)
+                animationTrack:Play()
+
+                local horizontalForward = Vector3.new(forward.X, 0, forward.Z)
+                if horizontalForward.Magnitude == 0 then
+                    horizontalForward = Vector3.new(0, 0, 1)
+                else
+                    horizontalForward = horizontalForward.Unit
+                end
+
+                local upward = Vector3.new(0, 1, 0)
+                local elevationAngle = math.rad(shootAngle)
+                local directionUnit = (horizontalForward * math.cos(elevationAngle) + upward * math.sin(elevationAngle)).Unit
+
+                local direction = directionUnit * shootPower -- scale by shootPower
+
+                local originalArgs = {
+                    shootPower, -- Replace the hardcoded value with shootPower here
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    [9] = false,
+                    [10] = Color3.new(0.8017513155937195, 0.31795769929885864, 0.627495288848877),
+                    [11] = 13,
+                    [12] = false,
+                    [13] = false,
+                    [14] = false,
+                    [15] = false,
+                    [16] = false,
+                    [17] = false,
+                    [18] = false,
+                    [20] = false,
+                    [22] = 0.03169425638392567,
+                    [23] = false
+                }
+
+                local args = {vector.create(direction.X, direction.Y, direction.Z)}
+                for i, v in pairs(originalArgs) do
+                    args[i + 1] = v
+                end
+
+                ReplicatedStorage:WaitForChild("shoot"):FireServer(unpack(args))
             end
 
-            local animationTrack = animator:LoadAnimation(animation)
-            animationTrack:Play()
-
-            local horizontalForward = Vector3.new(forward.X, 0, forward.Z)
-            if horizontalForward.Magnitude == 0 then
-                horizontalForward = Vector3.new(0, 0, 1)
+            if Value then
+                shootConnection = UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+                    if not gameProcessedEvent and input.KeyCode == Enum.KeyCode.C then
+                        shoot()
+                    end
+                end)
             else
-                horizontalForward = horizontalForward.Unit
+                if shootConnection then
+                    shootConnection:Disconnect()
+                    shootConnection = nil
+                end
             end
+        end,
+    })
 
-            local upward = Vector3.new(0, 1, 0)
-            local elevationAngle = math.rad(shootAngle)
-            local directionUnit = (horizontalForward * math.cos(elevationAngle) + upward * math.sin(elevationAngle)).Unit
+    local Fps boost = LeftGroupBox5:AddButton({
+        Text = "Fps boost",
+        Func = function()
+            -- FPS Booster Script
+    -- Place this in StarterPlayer > StarterPlayerScripts
 
-            local direction = directionUnit * shootPower -- scale by shootPower
+    local lighting = game:GetService("Lighting")
+    local terrain = workspace:FindFirstChildOfClass("Terrain")
 
-            local originalArgs = {
-                shootPower, -- Replace the hardcoded value with shootPower here
-                false,
-                false,
-                false,
-                false,
-                false,
-                [9] = false,
-                [10] = Color3.new(0.8017513155937195, 0.31795769929885864, 0.627495288848877),
-                [11] = 13,
-                [12] = false,
-                [13] = false,
-                [14] = false,
-                [15] = false,
-                [16] = false,
-                [17] = false,
-                [18] = false,
-                [20] = false,
-                [22] = 0.03169425638392567,
-                [23] = false
-            }
+    -- Lower lighting effects
+    lighting.GlobalShadows = false
+    lighting.FogEnd = 1000000
+    lighting.Brightness = 1
+    lighting.EnvironmentDiffuseScale = 0
+    lighting.EnvironmentSpecularScale = 0
 
-            local args = {vector.create(direction.X, direction.Y, direction.Z)}
-            for i, v in pairs(originalArgs) do
-                args[i + 1] = v
-            end
+    -- Set Terrain settings to low
+    if terrain then
+        terrain.WaterWaveSize = 0
+        terrain.WaterWaveSpeed = 0
+        terrain.WaterReflectance = 0
+        terrain.WaterTransparency = 1
+    end
 
-            ReplicatedStorage:WaitForChild("shoot"):FireServer(unpack(args))
+    -- Disable post-processing effects
+    for _, v in pairs(lighting:GetChildren()) do
+        if v:IsA("PostEffect") then
+            v.Enabled = false
         end
+    end
 
-        if Value then
-            shootConnection = UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
-                if not gameProcessedEvent and input.KeyCode == Enum.KeyCode.C then
-                    shoot()
+    -- Hide decals/textures
+    local function optimize(instance)
+        for _, obj in pairs(instance:GetDescendants()) do
+            if obj:IsA("Decal") or obj:IsA("Texture") then
+                obj.Transparency = 1
+            elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") then
+                obj.Enabled = false
+            elseif obj:IsA("Explosion") then
+                obj.Visible = false
+            end
+        end
+    end
+
+    -- Optimize existing game
+    optimize(game)
+
+    -- Also optimize new instances added later
+    game.DescendantAdded:Connect(function(obj)
+        if obj:IsA("Decal") or obj:IsA("Texture") then
+            obj.Transparency = 1
+        elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") then
+            obj.Enabled = false
+        elseif obj:IsA("Explosion") then
+            obj.Visible = false
+        end
+    end)
+
+    print("FPS Boost Applied")
+
+        end,
+        DoubleClick = false,
+
+        Tooltip = "This is the main button",
+        DisabledTooltip = "I am disabled!",
+
+        Disabled = false, -- Will disable the button (true / false)
+        Visible = true, -- Will make the button invisible (true / false)
+        Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
+    })
+
+    local Servercrash = LeftGroupBox5:AddButton({
+        Text = "Server crash",
+        Func = function()
+            -- Services
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+    -- Remotes
+    local OwnerCommands = ReplicatedStorage:WaitForChild("JojoRemotes"):WaitForChild("OwnerCommands")
+    local EmoteVFX = ReplicatedStorage:WaitForChild("EmoteVFX")
+
+    -- Emotes list
+    local emotes = {
+        "CHOCOLATE", "LOVE", "HEART", "ROSE", "CUPID", "LEAD", "PUZZLE",
+        "THINK", "VISION", "KING", "READY", "LAZY", "CHAMELEON", "PREPARED"
+    }
+
+    -- Loop function
+    task.spawn(function()
+        while true do
+            local start = os.clock()
+
+            -- Fire OwnerCommand
+            firesignal(OwnerCommands.OnClientEvent)
+
+            -- Fire all Emotes
+            for _, emote in ipairs(emotes) do
+                EmoteVFX:FireServer(emote)
+            end
+
+            -- Control loop speed (~1000 times per second)
+            local elapsed = os.clock() - start
+            local waitTime = math.max(0, (1/2000) - elapsed)
+            task.wait(waitTime)
+        end
+    end)
+
+        end,
+        DoubleClick = false,
+
+        Tooltip = "Crash server",
+        DisabledTooltip = "I am disabled!",
+
+        Disabled = false, -- Will disable the button (true / false)
+        Visible = true, -- Will make the button invisible (true / false)
+        Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
+    })
+
+    local RightGroupBox6 = Tabs.ingame:AddRightGroupbox("Auto aim slider")
+
+    local autoaimslider1 = 0
+    local autoaimslider2 = 0
+
+    RightGroupBox6:AddSlider("auto aim slider1", {
+        Text = "auto aim horizontal slider",
+        Default = 0,
+        Min = -15,
+        Max = 15,
+        Rounding = 1,
+        Compact = false,
+
+        Callback = function(Value)
+            autoaimslider1 = Value
+        end,
+
+        Tooltip = "I am a slider!", -- Information shown when you hover over the slider
+        DisabledTooltip = "I am disabled!", -- Information shown when you hover over the slider while it's disabled
+
+        Disabled = false, -- Will disable the slider (true / false)
+        Visible = true, -- Will make the slider invisible (true / false)
+    })
+
+    RightGroupBox6:AddSlider("auto aim slider2", {
+        Text = "auto aim vertical slider",
+        Default = 0,
+        Min = -5,
+        Max = 5,
+        Rounding = 1,
+        Compact = false,
+
+        Callback = function(Value)
+            autoaimslider2 = Value
+        end,
+
+        Tooltip = "I am a slider!", -- Information shown when you hover over the slider
+        DisabledTooltip = "I am disabled!", -- Information shown when you hover over the slider while it's disabled
+
+        Disabled = false, -- Will disable the slider (true / false)
+        Visible = true, -- Will make the slider invisible (true / false)
+    })
+
+    local RightGroupBox7 = Tabs.ingame:AddRightGroupbox("u20 map auto aim")
+
+    local autoAimConnection -- store keybind connection to manage later
+
+    RightGroupBox7:AddToggle("form autoaim u20 map", {
+        Text = "Form autoaim",
+        Tooltip = "Automatically aims and shoots with Formless",
+        DisabledTooltip = "This toggle is disabled",
+        Default = false,
+        Disabled = false,
+        Visible = true,
+        Risky = false,
+
+        Callback = function(Value)
+            if not Value then
+                if autoAimConnection then
+                    autoAimConnection:Disconnect()
+                    autoAimConnection = nil
+                end
+                return
+            end
+
+            local player = game.Players.LocalPlayer
+            local ReplicatedStorage = game:GetService("ReplicatedStorage")
+            local UserInputService = game:GetService("UserInputService")
+            local character = player.Character or player.CharacterAdded:Wait()
+            local hrp = character:WaitForChild("HumanoidRootPart")
+
+            local function getZones()
+                return {
+                    Right = Vector3.new(-455.58, 6 + autoaimslider2, -66.34 - autoaimslider1),
+                    Left  = Vector3.new(260.83, 6 + autoaimslider2, -66.72 + autoaimslider1)
+                }
+            end
+
+            local function getClosestZone()
+                local zones = getZones()
+                local distLeft = (zones.Left - hrp.Position).Magnitude
+                local distRight = (zones.Right - hrp.Position).Magnitude
+                return (distLeft < distRight) and zones.Left or zones.Right
+            end
+
+            local function aimExactlyBackwardFrom(targetPos)
+                -- Compute exact backwards facing CFrame
+                local backwardPos = hrp.Position * 2 - targetPos
+                hrp.CFrame = CFrame.lookAt(hrp.Position, backwardPos)
+            end
+
+            local function fireFormlessShot(targetPos)
+                local aura = character:FindFirstChild("AuraColour")
+                local r = aura and aura:FindFirstChild("Red") and aura.Red.Value or 1
+                local g = aura and aura:FindFirstChild("Green") and aura.Green.Value or 1
+                local b = aura and aura:FindFirstChild("Blue") and aura.Blue.Value or 1
+
+                local shotDirection = (targetPos - hrp.Position).Unit
+
+                local args = {
+                    [1] = shotDirection * 1.25 - hrp.CFrame.UpVector / 25,
+                    [2] = -100,
+                    [3] = false,
+                    [4] = true,
+                    [5] = false,
+                    [6] = false,
+                    [7] = false,
+                    [9] = false,
+                    [10] = Color3.new(r, g, b),
+                    [11] = 40,
+                    [12] = false,
+                    [13] = false,
+                    [14] = false,
+                    [15] = false,
+                    [16] = true,
+                    [17] = false,
+                    [18] = false
+                }
+
+                -- Uncomment when ready
+                -- ReplicatedStorage.JojoRemotes.OwnerCommands:FireServer(unpack(args))
+            end
+
+            local function runAutoAim()
+                local target = getClosestZone()
+                if target then
+                    aimExactlyBackwardFrom(target)
+                    fireFormlessShot(target)
+                end
+            end
+
+            autoAimConnection = UserInputService.InputBegan:Connect(function(input, gpe)
+                if not gpe and input.KeyCode == Enum.KeyCode.R then
+                    runAutoAim()
                 end
             end)
-        else
-            if shootConnection then
-                shootConnection:Disconnect()
-                shootConnection = nil
-            end
-        end
-    end,
-})
+        end,
+    })
 
-local autoaimslider1 = 0
-local autoaimslider2 = 0
-
-LeftGroupBox5:AddSlider("form auto aim slider1", {
-	Text = "auto aim horizontal slider",
-	Default = 0,
-	Min = -15,
-	Max = 15,
-	Rounding = 1,
-	Compact = false,
-
-	Callback = function(Value)
-		autoaimslider1 = Value
-	end,
-
-	Tooltip = "I am a slider!", -- Information shown when you hover over the slider
-	DisabledTooltip = "I am disabled!", -- Information shown when you hover over the slider while it's disabled
-
-	Disabled = false, -- Will disable the slider (true / false)
-	Visible = true, -- Will make the slider invisible (true / false)
-})
-
-LeftGroupBox5:AddSlider("form auto aim slider2", {
-	Text = "auto aim vertical slider",
-	Default = 0,
-	Min = -5,
-	Max = 5,
-	Rounding = 1,
-	Compact = false,
-
-	Callback = function(Value)
-		autoaimslider2 = Value
-	end,
-
-	Tooltip = "I am a slider!", -- Information shown when you hover over the slider
-	DisabledTooltip = "I am disabled!", -- Information shown when you hover over the slider while it's disabled
-
-	Disabled = false, -- Will disable the slider (true / false)
-	Visible = true, -- Will make the slider invisible (true / false)
-})
-
-local autoAimConnection -- store keybind connection to manage later
-
-LeftGroupBox5:AddToggle("form autoaim u20 map", {
-    Text = "Form autoaim u20 map",
-    Tooltip = "Automatically aims and shoots with Formless",
+    RightGroupBox7:AddToggle("realistic turn u20 map", {
+    Text = "realistic turn(T)",
+    Tooltip = "does a realistic turn for form auto aim when u click t",
     DisabledTooltip = "This toggle is disabled",
     Default = false,
     Disabled = false,
@@ -791,8 +1005,10 @@ LeftGroupBox5:AddToggle("form autoaim u20 map", {
         local player = game.Players.LocalPlayer
         local ReplicatedStorage = game:GetService("ReplicatedStorage")
         local UserInputService = game:GetService("UserInputService")
+        local ContextActionService = game:GetService("ContextActionService")
         local character = player.Character or player.CharacterAdded:Wait()
         local hrp = character:WaitForChild("HumanoidRootPart")
+        local camera = workspace.CurrentCamera
 
         local function getZones()
             return {
@@ -808,10 +1024,42 @@ LeftGroupBox5:AddToggle("form autoaim u20 map", {
             return (distLeft < distRight) and zones.Left or zones.Right
         end
 
-        local function aimExactlyBackwardFrom(targetPos)
-            -- Compute exact backwards facing CFrame
-            local backwardPos = hrp.Position * 2 - targetPos
-            hrp.CFrame = CFrame.lookAt(hrp.Position, backwardPos)
+        local function smoothRotateCameraTowardBackOf(targetPos)
+            local stepAngle = math.rad(9)
+            local angleThreshold = math.rad(1)
+
+            local targetDirection = (hrp.Position - targetPos).Unit
+
+            -- Lock user camera input
+            ContextActionService:BindAction("DisableCamera", function() return Enum.ContextActionResult.Sink end, false,
+                unpack(Enum.UserInputType:GetEnumItems()))
+            UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
+
+            local function angleBetween(v1, v2)
+                return math.acos(math.clamp(v1:Dot(v2), -1, 1))
+            end
+
+            while true do
+                local currentLook = camera.CFrame.LookVector
+                local angle = angleBetween(currentLook, targetDirection)
+                if angle < angleThreshold then
+                    camera.CFrame = CFrame.new(camera.CFrame.Position, camera.CFrame.Position + targetDirection)
+                    break
+                end
+
+                local axis = currentLook:Cross(targetDirection)
+                if axis.Magnitude == 0 then break end
+
+                axis = axis.Unit
+                local newDir = (CFrame.fromAxisAngle(axis, math.min(angle, stepAngle)) * currentLook).Unit
+                camera.CFrame = CFrame.new(camera.CFrame.Position, camera.CFrame.Position + newDir)
+
+                task.wait(0.001)
+            end
+
+            -- 🔓 Unlock camera input immediately after rotation completes
+            ContextActionService:UnbindAction("DisableCamera")
+            UserInputService.MouseBehavior = Enum.MouseBehavior.Default
         end
 
         local function fireFormlessShot(targetPos)
@@ -842,20 +1090,20 @@ LeftGroupBox5:AddToggle("form autoaim u20 map", {
                 [18] = false
             }
 
-            -- Uncomment when ready
+            -- Uncomment this to actually fire the shot:
             -- ReplicatedStorage.JojoRemotes.OwnerCommands:FireServer(unpack(args))
         end
 
         local function runAutoAim()
             local target = getClosestZone()
             if target then
-                aimExactlyBackwardFrom(target)
+                smoothRotateCameraTowardBackOf(target)
                 fireFormlessShot(target)
             end
         end
 
         autoAimConnection = UserInputService.InputBegan:Connect(function(input, gpe)
-            if not gpe and input.KeyCode == Enum.KeyCode.R then
+            if not gpe and input.KeyCode == Enum.KeyCode.T then
                 runAutoAim()
             end
         end)
@@ -866,570 +1114,456 @@ LeftGroupBox5:AddToggle("form autoaim u20 map", {
 
 
 
-local formAimZonesVisible = false
-local formAimZoneParts = {}
-local formAimUpdateLoop = nil
+    local formAimZonesVisible = false
+    local formAimZoneParts = {}
+    local formAimUpdateLoop = nil
 
-LeftGroupBox5:AddToggle("Show auto Aim Zones for u20 map", {
-    Text = "Show Form Aim Zones for u20 map",
-    Default = false,
-    Callback = function(Value)
-        formAimZonesVisible = Value
+    RightGroupBox7:AddToggle("Show sliders for u20 map", {
+        Text = "Show sliders",
+        Default = false,
+        Callback = function(Value)
+            formAimZonesVisible = Value
 
-        -- Cleanup any previous parts
-        for _, part in pairs(formAimZoneParts) do
-            if part then part:Destroy() end
+            -- Cleanup any previous parts
+            for _, part in pairs(formAimZoneParts) do
+                if part then part:Destroy() end
+            end
+            formAimZoneParts = {}
+
+            -- Stop old loop if running
+            if formAimUpdateLoop then
+                formAimUpdateLoop:Disconnect()
+                formAimUpdateLoop = nil
+            end
+
+            if not Value then return end
+
+            -- Create new parts (initially)
+            local zoneNames = { "Right Zone", "Left Zone" }
+            for i = 1, 2 do
+                local part = Instance.new("Part")
+                part.Name = zoneNames[i]
+                part.Size = Vector3.new(1, 0.5, 5)
+                part.Anchored = true
+                part.CanCollide = false
+                part.Transparency = 0.4
+                part.Material = Enum.Material.SmoothPlastic
+                part.BrickColor = BrickColor.Gray()
+                part.Position = Vector3.new(0, 0, 0) -- placeholder
+                part.Parent = workspace
+                table.insert(formAimZoneParts, part)
+            end
+
+            -- Continuous update loop every 0.1s
+            formAimUpdateLoop = game:GetService("RunService").Heartbeat:Connect(function()
+                if not formAimZonesVisible then return end
+
+                local positions = {
+                    Vector3.new(-455.58, 6 + autoaimslider2, -66.34 - autoaimslider1),
+                    Vector3.new(260.83, 6 + autoaimslider2, -66.72 + autoaimslider1)
+                }
+
+                for i, part in ipairs(formAimZoneParts) do
+                    if part then
+                        part.Position = positions[i] + Vector3.new(0, 2, 0)
+                    end
+                end
+            end)
         end
-        formAimZoneParts = {}
+    })
 
-        -- Stop old loop if running
-        if formAimUpdateLoop then
-            formAimUpdateLoop:Disconnect()
-            formAimUpdateLoop = nil
-        end
+    local RightGroupBox8 = Tabs.ingame:AddRightGroupbox("Auto aim tourny map")
 
-        if not Value then return end
+    RightGroupBox8:AddToggle("form autoaim tourny map", {
+        Text = "Form autoaim",
+        Tooltip = "Automatically aims and shoots with Formless",
+        DisabledTooltip = "This toggle is disabled",
+        Default = false,
+        Disabled = false,
+        Visible = true,
+        Risky = false,
 
-        -- Create new parts (initially)
-        local zoneNames = { "Right Zone", "Left Zone" }
-        for i = 1, 2 do
-            local part = Instance.new("Part")
-            part.Name = zoneNames[i]
-            part.Size = Vector3.new(1, 0.5, 5)
-            part.Anchored = true
-            part.CanCollide = false
-            part.Transparency = 0.4
-            part.Material = Enum.Material.SmoothPlastic
-            part.BrickColor = BrickColor.Gray()
-            part.Position = Vector3.new(0, 0, 0) -- placeholder
-            part.Parent = workspace
-            table.insert(formAimZoneParts, part)
-        end
+        Callback = function(Value)
+            if not Value then
+                if autoAimConnection then
+                    autoAimConnection:Disconnect()
+                    autoAimConnection = nil
+                end
+                return
+            end
 
-        -- Continuous update loop every 0.1s
-        formAimUpdateLoop = game:GetService("RunService").Heartbeat:Connect(function()
-            if not formAimZonesVisible then return end
+            local player = game.Players.LocalPlayer
+            local ReplicatedStorage = game:GetService("ReplicatedStorage")
+            local UserInputService = game:GetService("UserInputService")
+            local character = player.Character or player.CharacterAdded:Wait()
+            local hrp = character:WaitForChild("HumanoidRootPart")
 
-            local positions = {
-                Vector3.new(-455.58, 6 + autoaimslider2, -66.34 - autoaimslider1),
-                Vector3.new(260.83, 6 + autoaimslider2, -66.72 + autoaimslider1)
-            }
+            local function getZones()
+                return {
+                    Right = Vector3.new(-327 + autoaimslider1, 6 + autoaimslider2, -569),
+                    Left  = Vector3.new(-327 - autoaimslider1, 6 + autoaimslider2, -8)
+                }
+            end
 
-            for i, part in ipairs(formAimZoneParts) do
-                if part then
-                    part.Position = positions[i] + Vector3.new(0, 2, 0)
+            local function getClosestZone()
+                local zones = getZones()
+                local distLeft = (zones.Left - hrp.Position).Magnitude
+                local distRight = (zones.Right - hrp.Position).Magnitude
+                return (distLeft < distRight) and zones.Left or zones.Right
+            end
+
+            local function aimExactlyBackwardFrom(targetPos)
+                -- Compute exact backwards facing CFrame
+                local backwardPos = hrp.Position * 2 - targetPos
+                hrp.CFrame = CFrame.lookAt(hrp.Position, backwardPos)
+            end
+
+            local function fireFormlessShot(targetPos)
+                local aura = character:FindFirstChild("AuraColour")
+                local r = aura and aura:FindFirstChild("Red") and aura.Red.Value or 1
+                local g = aura and aura:FindFirstChild("Green") and aura.Green.Value or 1
+                local b = aura and aura:FindFirstChild("Blue") and aura.Blue.Value or 1
+
+                local shotDirection = (targetPos - hrp.Position).Unit
+
+                local args = {
+                    [1] = shotDirection * 1.25 - hrp.CFrame.UpVector / 25,
+                    [2] = -100,
+                    [3] = false,
+                    [4] = true,
+                    [5] = false,
+                    [6] = false,
+                    [7] = false,
+                    [9] = false,
+                    [10] = Color3.new(r, g, b),
+                    [11] = 40,
+                    [12] = false,
+                    [13] = false,
+                    [14] = false,
+                    [15] = false,
+                    [16] = true,
+                    [17] = false,
+                    [18] = false
+                }
+
+                -- Uncomment when ready
+                -- ReplicatedStorage.JojoRemotes.OwnerCommands:FireServer(unpack(args))
+            end
+
+            local function runAutoAim()
+                local target = getClosestZone()
+                if target then
+                    aimExactlyBackwardFrom(target)
+                    fireFormlessShot(target)
                 end
             end
-        end)
-    end
-})
 
-LeftGroupBox5:AddToggle("form autoaim tourny map", {
-    Text = "Form autoaim tourny map",
-    Tooltip = "Automatically aims and shoots with Formless",
-    DisabledTooltip = "This toggle is disabled",
-    Default = false,
-    Disabled = false,
-    Visible = true,
-    Risky = false,
+            autoAimConnection = UserInputService.InputBegan:Connect(function(input, gpe)
+                if not gpe and input.KeyCode == Enum.KeyCode.R then
+                    runAutoAim()
+                end
+            end)
+        end,
+    })
 
-    Callback = function(Value)
-        if not Value then
-            if autoAimConnection then
-                autoAimConnection:Disconnect()
-                autoAimConnection = nil
+
+
+    local formAimZonesVisible = false
+    local formAimZoneParts = {}
+    local formAimUpdateLoop = nil
+
+    RightGroupBox8:AddToggle("auto Aim sliders for tourny map", {
+        Text = "Show sliders",
+        Default = false,
+        Callback = function(Value)
+            formAimZonesVisible = Value
+
+            -- Cleanup any previous parts
+            for _, part in pairs(formAimZoneParts) do
+                if part then part:Destroy() end
             end
-            return
-        end
+            formAimZoneParts = {}
 
-        local player = game.Players.LocalPlayer
-        local ReplicatedStorage = game:GetService("ReplicatedStorage")
-        local UserInputService = game:GetService("UserInputService")
-        local character = player.Character or player.CharacterAdded:Wait()
-        local hrp = character:WaitForChild("HumanoidRootPart")
-
-        local function getZones()
-            return {
-                Right = Vector3.new(-327 + autoaimslider1, 6 + autoaimslider2, -569),
-                Left  = Vector3.new(-327 - autoaimslider1, 6 + autoaimslider2, -8)
-            }
-        end
-
-        local function getClosestZone()
-            local zones = getZones()
-            local distLeft = (zones.Left - hrp.Position).Magnitude
-            local distRight = (zones.Right - hrp.Position).Magnitude
-            return (distLeft < distRight) and zones.Left or zones.Right
-        end
-
-        local function aimExactlyBackwardFrom(targetPos)
-            -- Compute exact backwards facing CFrame
-            local backwardPos = hrp.Position * 2 - targetPos
-            hrp.CFrame = CFrame.lookAt(hrp.Position, backwardPos)
-        end
-
-        local function fireFormlessShot(targetPos)
-            local aura = character:FindFirstChild("AuraColour")
-            local r = aura and aura:FindFirstChild("Red") and aura.Red.Value or 1
-            local g = aura and aura:FindFirstChild("Green") and aura.Green.Value or 1
-            local b = aura and aura:FindFirstChild("Blue") and aura.Blue.Value or 1
-
-            local shotDirection = (targetPos - hrp.Position).Unit
-
-            local args = {
-                [1] = shotDirection * 1.25 - hrp.CFrame.UpVector / 25,
-                [2] = -100,
-                [3] = false,
-                [4] = true,
-                [5] = false,
-                [6] = false,
-                [7] = false,
-                [9] = false,
-                [10] = Color3.new(r, g, b),
-                [11] = 40,
-                [12] = false,
-                [13] = false,
-                [14] = false,
-                [15] = false,
-                [16] = true,
-                [17] = false,
-                [18] = false
-            }
-
-            -- Uncomment when ready
-            -- ReplicatedStorage.JojoRemotes.OwnerCommands:FireServer(unpack(args))
-        end
-
-        local function runAutoAim()
-            local target = getClosestZone()
-            if target then
-                aimExactlyBackwardFrom(target)
-                fireFormlessShot(target)
+            -- Stop old loop if running
+            if formAimUpdateLoop then
+                formAimUpdateLoop:Disconnect()
+                formAimUpdateLoop = nil
             end
-        end
 
-        autoAimConnection = UserInputService.InputBegan:Connect(function(input, gpe)
-            if not gpe and input.KeyCode == Enum.KeyCode.R then
-                runAutoAim()
+            if not Value then return end
+
+            -- Create new parts (initially)
+            local zoneNames = { "Right Zone", "Left Zone" }
+            for i = 1, 2 do
+                local part = Instance.new("Part")
+                part.Name = zoneNames[i]
+                part.Size = Vector3.new(20, 0.5, 1)
+                part.Anchored = true
+                part.CanCollide = false
+                part.Transparency = 0.4
+                part.Material = Enum.Material.SmoothPlastic
+                part.BrickColor = BrickColor.Gray()
+                part.Position = Vector3.new(0, 0, 0) -- placeholder
+                part.Parent = workspace
+                table.insert(formAimZoneParts, part)
             end
-        end)
-    end,
-})
 
+            -- Continuous update loop every 0.1s
+            formAimUpdateLoop = game:GetService("RunService").Heartbeat:Connect(function()
+                if not formAimZonesVisible then return end
 
+                local positions = {
+                    Vector3.new(-327 + autoaimslider1, 6 + autoaimslider2, -569),
+                    Vector3.new(-327 - autoaimslider1, 6 + autoaimslider2, -8)
+                }
 
-local formAimZonesVisible = false
-local formAimZoneParts = {}
-local formAimUpdateLoop = nil
-
-LeftGroupBox5:AddToggle("auto Aim Zones for tourny map", {
-    Text = "auto Aim Zones for tourny map",
-    Default = false,
-    Callback = function(Value)
-        formAimZonesVisible = Value
-
-        -- Cleanup any previous parts
-        for _, part in pairs(formAimZoneParts) do
-            if part then part:Destroy() end
+                for i, part in ipairs(formAimZoneParts) do
+                    if part then
+                        part.Position = positions[i] + Vector3.new(0, 2, 0)
+                    end
+                end
+            end)
         end
-        formAimZoneParts = {}
+    })
 
-        -- Stop old loop if running
-        if formAimUpdateLoop then
-            formAimUpdateLoop:Disconnect()
-            formAimUpdateLoop = nil
-        end
+    local RightGroupBox9 = Tabs.ingame:AddRightGroupbox("Auto aim autos map")
+    
+    RightGroupBox9:AddToggle("form autoaim auto map", {
+        Text = "Form autoaim",
+        Tooltip = "Automatically aims and shoots with Formless",
+        DisabledTooltip = "This toggle is disabled",
+        Default = false,
+        Disabled = false,
+        Visible = true,
+        Risky = false,
 
-        if not Value then return end
+        Callback = function(Value)
+            if not Value then
+                if autoAimConnection then
+                    autoAimConnection:Disconnect()
+                    autoAimConnection = nil
+                end
+                return
+            end
 
-        -- Create new parts (initially)
-        local zoneNames = { "Right Zone", "Left Zone" }
-        for i = 1, 2 do
-            local part = Instance.new("Part")
-            part.Name = zoneNames[i]
-            part.Size = Vector3.new(20, 0.5, 1)
-            part.Anchored = true
-            part.CanCollide = false
-            part.Transparency = 0.4
-            part.Material = Enum.Material.SmoothPlastic
-            part.BrickColor = BrickColor.Gray()
-            part.Position = Vector3.new(0, 0, 0) -- placeholder
-            part.Parent = workspace
-            table.insert(formAimZoneParts, part)
-        end
+            local player = game.Players.LocalPlayer
+            local ReplicatedStorage = game:GetService("ReplicatedStorage")
+            local UserInputService = game:GetService("UserInputService")
+            local character = player.Character or player.CharacterAdded:Wait()
+            local hrp = character:WaitForChild("HumanoidRootPart")
 
-        -- Continuous update loop every 0.1s
-        formAimUpdateLoop = game:GetService("RunService").Heartbeat:Connect(function()
-            if not formAimZonesVisible then return end
+            local function getZones()
+                return {
+                    Right = Vector3.new(-15 - autoaimslider1, 6 + autoaimslider2, -68),
+                    Left  = Vector3.new(-15 + autoaimslider1, 6 + autoaimslider2, -522)
+                }
+            end
 
-            local positions = {
-                Vector3.new(-327 + autoaimslider1, 6 + autoaimslider2, -569),
-                Vector3.new(-327 - autoaimslider1, 6 + autoaimslider2, -8)
-            }
+            local function getClosestZone()
+                local zones = getZones()
+                local distLeft = (zones.Left - hrp.Position).Magnitude
+                local distRight = (zones.Right - hrp.Position).Magnitude
+                return (distLeft < distRight) and zones.Left or zones.Right
+            end
 
-            for i, part in ipairs(formAimZoneParts) do
-                if part then
-                    part.Position = positions[i] + Vector3.new(0, 2, 0)
+            local function aimExactlyBackwardFrom(targetPos)
+                -- Compute exact backwards facing CFrame
+                local backwardPos = hrp.Position * 2 - targetPos
+                hrp.CFrame = CFrame.lookAt(hrp.Position, backwardPos)
+            end
+
+            local function fireFormlessShot(targetPos)
+                local aura = character:FindFirstChild("AuraColour")
+                local r = aura and aura:FindFirstChild("Red") and aura.Red.Value or 1
+                local g = aura and aura:FindFirstChild("Green") and aura.Green.Value or 1
+                local b = aura and aura:FindFirstChild("Blue") and aura.Blue.Value or 1
+
+                local shotDirection = (targetPos - hrp.Position).Unit
+
+                local args = {
+                    [1] = shotDirection * 1.25 - hrp.CFrame.UpVector / 25,
+                    [2] = -100,
+                    [3] = false,
+                    [4] = true,
+                    [5] = false,
+                    [6] = false,
+                    [7] = false,
+                    [9] = false,
+                    [10] = Color3.new(r, g, b),
+                    [11] = 40,
+                    [12] = false,
+                    [13] = false,
+                    [14] = false,
+                    [15] = false,
+                    [16] = true,
+                    [17] = false,
+                    [18] = false
+                }
+
+                -- Uncomment when ready
+                -- ReplicatedStorage.JojoRemotes.OwnerCommands:FireServer(unpack(args))
+            end
+
+            local function runAutoAim()
+                local target = getClosestZone()
+                if target then
+                    aimExactlyBackwardFrom(target)
+                    fireFormlessShot(target)
                 end
             end
-        end)
-    end
-})
 
-LeftGroupBox5:AddToggle("form autoaim auto map", {
-    Text = "Form autoaim auto map",
-    Tooltip = "Automatically aims and shoots with Formless",
-    DisabledTooltip = "This toggle is disabled",
-    Default = false,
-    Disabled = false,
-    Visible = true,
-    Risky = false,
-
-    Callback = function(Value)
-        if not Value then
-            if autoAimConnection then
-                autoAimConnection:Disconnect()
-                autoAimConnection = nil
-            end
-            return
-        end
-
-        local player = game.Players.LocalPlayer
-        local ReplicatedStorage = game:GetService("ReplicatedStorage")
-        local UserInputService = game:GetService("UserInputService")
-        local character = player.Character or player.CharacterAdded:Wait()
-        local hrp = character:WaitForChild("HumanoidRootPart")
-
-        local function getZones()
-            return {
-                Right = Vector3.new(-15 - autoaimslider1, 6 + autoaimslider2, -68),
-                Left  = Vector3.new(-15 + autoaimslider1, 6 + autoaimslider2, -522)
-            }
-        end
-
-        local function getClosestZone()
-            local zones = getZones()
-            local distLeft = (zones.Left - hrp.Position).Magnitude
-            local distRight = (zones.Right - hrp.Position).Magnitude
-            return (distLeft < distRight) and zones.Left or zones.Right
-        end
-
-        local function aimExactlyBackwardFrom(targetPos)
-            -- Compute exact backwards facing CFrame
-            local backwardPos = hrp.Position * 2 - targetPos
-            hrp.CFrame = CFrame.lookAt(hrp.Position, backwardPos)
-        end
-
-        local function fireFormlessShot(targetPos)
-            local aura = character:FindFirstChild("AuraColour")
-            local r = aura and aura:FindFirstChild("Red") and aura.Red.Value or 1
-            local g = aura and aura:FindFirstChild("Green") and aura.Green.Value or 1
-            local b = aura and aura:FindFirstChild("Blue") and aura.Blue.Value or 1
-
-            local shotDirection = (targetPos - hrp.Position).Unit
-
-            local args = {
-                [1] = shotDirection * 1.25 - hrp.CFrame.UpVector / 25,
-                [2] = -100,
-                [3] = false,
-                [4] = true,
-                [5] = false,
-                [6] = false,
-                [7] = false,
-                [9] = false,
-                [10] = Color3.new(r, g, b),
-                [11] = 40,
-                [12] = false,
-                [13] = false,
-                [14] = false,
-                [15] = false,
-                [16] = true,
-                [17] = false,
-                [18] = false
-            }
-
-            -- Uncomment when ready
-            -- ReplicatedStorage.JojoRemotes.OwnerCommands:FireServer(unpack(args))
-        end
-
-        local function runAutoAim()
-            local target = getClosestZone()
-            if target then
-                aimExactlyBackwardFrom(target)
-                fireFormlessShot(target)
-            end
-        end
-
-        autoAimConnection = UserInputService.InputBegan:Connect(function(input, gpe)
-            if not gpe and input.KeyCode == Enum.KeyCode.R then
-                runAutoAim()
-            end
-        end)
-    end,
-})
-
-
-
-local formAimZonesVisible = false
-local formAimZoneParts = {}
-local formAimUpdateLoop = nil
-
-LeftGroupBox5:AddToggle("auto Aim Zones for auto map", {
-    Text = "auto Aim Zones for auto map",
-    Default = false,
-    Callback = function(Value)
-        formAimZonesVisible = Value
-
-        -- Cleanup any previous parts
-        for _, part in pairs(formAimZoneParts) do
-            if part then part:Destroy() end
-        end
-        formAimZoneParts = {}
-
-        -- Stop old loop if running
-        if formAimUpdateLoop then
-            formAimUpdateLoop:Disconnect()
-            formAimUpdateLoop = nil
-        end
-
-        if not Value then return end
-
-        -- Create new parts (initially)
-        local zoneNames = { "Right Zone", "Left Zone" }
-        for i = 1, 2 do
-            local part = Instance.new("Part")
-            part.Name = zoneNames[i]
-            part.Size = Vector3.new(20, 0.5, 1)
-            part.Anchored = true
-            part.CanCollide = false
-            part.Transparency = 0.4
-            part.Material = Enum.Material.SmoothPlastic
-            part.BrickColor = BrickColor.Gray()
-            part.Position = Vector3.new(0, 0, 0) -- placeholder
-            part.Parent = workspace
-            table.insert(formAimZoneParts, part)
-        end
-
-        -- Continuous update loop every 0.1s
-        formAimUpdateLoop = game:GetService("RunService").Heartbeat:Connect(function()
-            if not formAimZonesVisible then return end
-
-            local positions = {
-                Vector3.new(-15 - autoaimslider1, 6 + autoaimslider2, -68),
-                Vector3.new(-15 + autoaimslider1, 6 + autoaimslider2, -522)
-            }
-
-            for i, part in ipairs(formAimZoneParts) do
-                if part then
-                    part.Position = positions[i] + Vector3.new(0, 2, 0)
+            autoAimConnection = UserInputService.InputBegan:Connect(function(input, gpe)
+                if not gpe and input.KeyCode == Enum.KeyCode.R then
+                    runAutoAim()
                 end
+            end)
+        end,
+    })
+
+
+
+    local formAimZonesVisible = false
+    local formAimZoneParts = {}
+    local formAimUpdateLoop = nil
+
+    RightGroupBox9:AddToggle("auto Aim Zones for auto map", {
+        Text = "show sliders",
+        Default = false,
+        Callback = function(Value)
+            formAimZonesVisible = Value
+
+            -- Cleanup any previous parts
+            for _, part in pairs(formAimZoneParts) do
+                if part then part:Destroy() end
             end
-        end)
-    end
-})
+            formAimZoneParts = {}
 
+            -- Stop old loop if running
+            if formAimUpdateLoop then
+                formAimUpdateLoop:Disconnect()
+                formAimUpdateLoop = nil
+            end
 
-local Fps boost = LeftGroupBox5:AddButton({
-	Text = "Fps boost",
-	Func = function()
-		-- FPS Booster Script
--- Place this in StarterPlayer > StarterPlayerScripts
+            if not Value then return end
 
-local lighting = game:GetService("Lighting")
-local terrain = workspace:FindFirstChildOfClass("Terrain")
+            -- Create new parts (initially)
+            local zoneNames = { "Right Zone", "Left Zone" }
+            for i = 1, 2 do
+                local part = Instance.new("Part")
+                part.Name = zoneNames[i]
+                part.Size = Vector3.new(20, 0.5, 1)
+                part.Anchored = true
+                part.CanCollide = false
+                part.Transparency = 0.4
+                part.Material = Enum.Material.SmoothPlastic
+                part.BrickColor = BrickColor.Gray()
+                part.Position = Vector3.new(0, 0, 0) -- placeholder
+                part.Parent = workspace
+                table.insert(formAimZoneParts, part)
+            end
 
--- Lower lighting effects
-lighting.GlobalShadows = false
-lighting.FogEnd = 1000000
-lighting.Brightness = 1
-lighting.EnvironmentDiffuseScale = 0
-lighting.EnvironmentSpecularScale = 0
+            -- Continuous update loop every 0.1s
+            formAimUpdateLoop = game:GetService("RunService").Heartbeat:Connect(function()
+                if not formAimZonesVisible then return end
 
--- Set Terrain settings to low
-if terrain then
-    terrain.WaterWaveSize = 0
-    terrain.WaterWaveSpeed = 0
-    terrain.WaterReflectance = 0
-    terrain.WaterTransparency = 1
-end
+                local positions = {
+                    Vector3.new(-15 - autoaimslider1, 6 + autoaimslider2, -68),
+                    Vector3.new(-15 + autoaimslider1, 6 + autoaimslider2, -522)
+                }
 
--- Disable post-processing effects
-for _, v in pairs(lighting:GetChildren()) do
-    if v:IsA("PostEffect") then
-        v.Enabled = false
-    end
-end
-
--- Hide decals/textures
-local function optimize(instance)
-    for _, obj in pairs(instance:GetDescendants()) do
-        if obj:IsA("Decal") or obj:IsA("Texture") then
-            obj.Transparency = 1
-        elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") then
-            obj.Enabled = false
-        elseif obj:IsA("Explosion") then
-            obj.Visible = false
+                for i, part in ipairs(formAimZoneParts) do
+                    if part then
+                        part.Position = positions[i] + Vector3.new(0, 2, 0)
+                    end
+                end
+            end)
         end
-    end
-end
+    })
 
--- Optimize existing game
-optimize(game)
 
--- Also optimize new instances added later
-game.DescendantAdded:Connect(function(obj)
-    if obj:IsA("Decal") or obj:IsA("Texture") then
-        obj.Transparency = 1
-    elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") then
-        obj.Enabled = false
-    elseif obj:IsA("Explosion") then
-        obj.Visible = false
-    end
-end)
+    -- UI Settings
+    local MenuGroup = Tabs["UI Settings"]:AddLeftGroupbox("Menu")
 
-print("FPS Boost Applied")
+    MenuGroup:AddToggle("KeybindMenuOpen", {
+        Default = Library.KeybindFrame.Visible,
+        Text = "Open Keybind Menu",
+        Callback = function(value)
+            Library.KeybindFrame.Visible = value
+        end,
+    })
+    MenuGroup:AddToggle("ShowCustomCursor", {
+        Text = "Custom Cursor",
+        Default = true,
+        Callback = function(Value)
+            Library.ShowCustomCursor = Value
+        end,
+    })
+    MenuGroup:AddDropdown("NotificationSide", {
+        Values = { "Left", "Right" },
+        Default = "Right",
 
-	end,
-	DoubleClick = false,
+        Text = "Notification Side",
 
-	Tooltip = "This is the main button",
-	DisabledTooltip = "I am disabled!",
+        Callback = function(Value)
+            Library:SetNotifySide(Value)
+        end,
+    })
+    MenuGroup:AddDropdown("DPIDropdown", {
+        Values = { "50%", "75%", "100%", "125%", "150%", "175%", "200%" },
+        Default = "100%",
 
-	Disabled = false, -- Will disable the button (true / false)
-	Visible = true, -- Will make the button invisible (true / false)
-	Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
-})
+        Text = "DPI Scale",
 
-local Servercrash = LeftGroupBox5:AddButton({
-	Text = "Server crash",
-	Func = function()
-		-- Services
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        Callback = function(Value)
+            Value = Value:gsub("%%", "")
+            local DPI = tonumber(Value)
 
--- Remotes
-local OwnerCommands = ReplicatedStorage:WaitForChild("JojoRemotes"):WaitForChild("OwnerCommands")
-local EmoteVFX = ReplicatedStorage:WaitForChild("EmoteVFX")
+            Library:SetDPIScale(DPI)
+        end,
+    })
+    MenuGroup:AddDivider()
+    MenuGroup:AddLabel("Menu bind")
+        :AddKeyPicker("MenuKeybind", { Default = "RightShift", NoUI = true, Text = "Menu keybind" })
 
--- Emotes list
-local emotes = {
-    "CHOCOLATE", "LOVE", "HEART", "ROSE", "CUPID", "LEAD", "PUZZLE",
-    "THINK", "VISION", "KING", "READY", "LAZY", "CHAMELEON", "PREPARED"
-}
+    MenuGroup:AddButton("Unload", function()
+        Library:Unload()
+    end)
 
--- Loop function
-task.spawn(function()
-    while true do
-        local start = os.clock()
+    Library.ToggleKeybind = Options.MenuKeybind -- Allows you to have a custom keybind for the menu
 
-        -- Fire OwnerCommand
-        firesignal(OwnerCommands.OnClientEvent)
+    -- Addons:
+    -- SaveManager (Allows you to have a configuration system)
+    -- ThemeManager (Allows you to have a menu theme system)
 
-        -- Fire all Emotes
-        for _, emote in ipairs(emotes) do
-            EmoteVFX:FireServer(emote)
-        end
+    -- Hand the library over to our managers
+    ThemeManager:SetLibrary(Library)
+    SaveManager:SetLibrary(Library)
 
-        -- Control loop speed (~1000 times per second)
-        local elapsed = os.clock() - start
-        local waitTime = math.max(0, (1/2000) - elapsed)
-        task.wait(waitTime)
-    end
-end)
+    -- Ignore keys that are used by ThemeManager.
+    -- (we dont want configs to save themes, do we?)
+    SaveManager:IgnoreThemeSettings()
 
-	end,
-	DoubleClick = false,
+    -- Adds our MenuKeybind to the ignore list
+    -- (do you want each config to have a different menu key? probably not.)
+    SaveManager:SetIgnoreIndexes({ "MenuKeybind" })
 
-	Tooltip = "Crash server",
-	DisabledTooltip = "I am disabled!",
+    -- use case for doing it this way:
+    -- a script hub could have themes in a global folder
+    -- and game configs in a separate folder per game
+    ThemeManager:SetFolder("MyScriptHub")
+    SaveManager:SetFolder("MyScriptHub/specific-game")
+    SaveManager:SetSubFolder("specific-place") -- if the game has multiple places inside of it (for example: DOORS)
+    -- you can use this to save configs for those places separately
+    -- The path in this script would be: MyScriptHub/specific-game/settings/specific-place
+    -- [ This is optional ]
 
-	Disabled = false, -- Will disable the button (true / false)
-	Visible = true, -- Will make the button invisible (true / false)
-	Risky = false, -- Makes the text red (the color can be changed using Library.Scheme.Red) (Default value = false)
-})
+    -- Builds our config menu on the right side of our tab
+    SaveManager:BuildConfigSection(Tabs["UI Settings"])
 
--- UI Settings
-local MenuGroup = Tabs["UI Settings"]:AddLeftGroupbox("Menu")
+    -- Builds our theme menu (with plenty of built in themes) on the left side
+    -- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
+    ThemeManager:ApplyToTab(Tabs["UI Settings"])
 
-MenuGroup:AddToggle("KeybindMenuOpen", {
-	Default = Library.KeybindFrame.Visible,
-	Text = "Open Keybind Menu",
-	Callback = function(value)
-		Library.KeybindFrame.Visible = value
-	end,
-})
-MenuGroup:AddToggle("ShowCustomCursor", {
-	Text = "Custom Cursor",
-	Default = true,
-	Callback = function(Value)
-		Library.ShowCustomCursor = Value
-	end,
-})
-MenuGroup:AddDropdown("NotificationSide", {
-	Values = { "Left", "Right" },
-	Default = "Right",
-
-	Text = "Notification Side",
-
-	Callback = function(Value)
-		Library:SetNotifySide(Value)
-	end,
-})
-MenuGroup:AddDropdown("DPIDropdown", {
-	Values = { "50%", "75%", "100%", "125%", "150%", "175%", "200%" },
-	Default = "100%",
-
-	Text = "DPI Scale",
-
-	Callback = function(Value)
-		Value = Value:gsub("%%", "")
-		local DPI = tonumber(Value)
-
-		Library:SetDPIScale(DPI)
-	end,
-})
-MenuGroup:AddDivider()
-MenuGroup:AddLabel("Menu bind")
-	:AddKeyPicker("MenuKeybind", { Default = "RightShift", NoUI = true, Text = "Menu keybind" })
-
-MenuGroup:AddButton("Unload", function()
-	Library:Unload()
-end)
-
-Library.ToggleKeybind = Options.MenuKeybind -- Allows you to have a custom keybind for the menu
-
--- Addons:
--- SaveManager (Allows you to have a configuration system)
--- ThemeManager (Allows you to have a menu theme system)
-
--- Hand the library over to our managers
-ThemeManager:SetLibrary(Library)
-SaveManager:SetLibrary(Library)
-
--- Ignore keys that are used by ThemeManager.
--- (we dont want configs to save themes, do we?)
-SaveManager:IgnoreThemeSettings()
-
--- Adds our MenuKeybind to the ignore list
--- (do you want each config to have a different menu key? probably not.)
-SaveManager:SetIgnoreIndexes({ "MenuKeybind" })
-
--- use case for doing it this way:
--- a script hub could have themes in a global folder
--- and game configs in a separate folder per game
-ThemeManager:SetFolder("MyScriptHub")
-SaveManager:SetFolder("MyScriptHub/specific-game")
-SaveManager:SetSubFolder("specific-place") -- if the game has multiple places inside of it (for example: DOORS)
--- you can use this to save configs for those places separately
--- The path in this script would be: MyScriptHub/specific-game/settings/specific-place
--- [ This is optional ]
-
--- Builds our config menu on the right side of our tab
-SaveManager:BuildConfigSection(Tabs["UI Settings"])
-
--- Builds our theme menu (with plenty of built in themes) on the left side
--- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
-ThemeManager:ApplyToTab(Tabs["UI Settings"])
-
--- You can use the SaveManager:LoadAutoloadConfig() to load a config
--- which has been marked to be one that auto loads!
-SaveManager:LoadAutoloadConfig()
+    -- You can use the SaveManager:LoadAutoloadConfig() to load a config
+    -- which has been marked to be one that auto loads!
+    SaveManager:LoadAutoloadConfig()
