@@ -1,4 +1,4 @@
-    -- starting gui
+-- starting gui
     local Players = game:GetService("Players")
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local Lighting = game:GetService("Lighting")
@@ -59,8 +59,6 @@
     }
 
     local LeftGroupBox = Tabs.Main:AddLeftGroupbox("Misc")
-
-
 
     local animation = LeftGroupBox:AddButton({
         Text = "animation",
@@ -244,7 +242,6 @@
     local getWeaponSelection = "na"
     local getTraitSelection = "na"
 
-
     RightGroupbox:AddDropdown("Weapon", {
         Values = { "Accelerate", "Acrobatic", "AceEater", "Chigiri", "CopyCat", "DirectShot", "Emperor", "Formless",
         "GodSpeed", "IronHead", "King", "Kunigami", "Leader", "LongLegs", "Monster", "Nagi", "Neurotic",
@@ -337,7 +334,6 @@
         Visible = true, -- Will make the dropdown invisible (true / false)
     })
 
-
     RightGroupbox:AddToggle("trait roll", {
         Text = "Auto roll Trait",
         Tooltip = "This is a tooltip",
@@ -405,29 +401,31 @@
         end,
     })
 
-
-
     local LeftGroupbox2 = Tabs.Main:AddLeftGroupbox("Current stuff")
-    local yen = player.Character.RankSystem.Yen
-    local flow1 = player.Character.AuraColour.Buff.value
-    local flow2 = player.Character.AuraColour.Buff:GetAttribute("BuffValue")
-
     pingLabel = LeftGroupbox2:AddLabel("Current Ping: ...")
-    LeftGroupbox2:AddLabel("note the lower your")
-    LeftGroupbox2:AddLabel("ping the faster you spin")
-    weaponLabel = LeftGroupbox2:AddLabel("Current Weapon: ...")
-    traitLabel = LeftGroupbox2:AddLabel("Current Trait: ...")
-    yenLabel = LeftGroupbox2:AddLabel("Yen: ...")
-    flow1Label = LeftGroupbox2:AddLabel("Flow type: ...")
-    flow2Label = LeftGroupbox2:AddLabel("Flow buff: ...")
+LeftGroupbox2:AddLabel("note the lower your")
+LeftGroupbox2:AddLabel("ping the faster you spin")
+weaponLabel = LeftGroupbox2:AddLabel("Current Weapon: ...")
+traitLabel = LeftGroupbox2:AddLabel("Current Trait: ...")
+yenLabel = LeftGroupbox2:AddLabel("Yen: ...")
+flow1Label = LeftGroupbox2:AddLabel("Flow type: ...")
+flow2Label = LeftGroupbox2:AddLabel("Flow buff: ...")
+redvallabel = LeftGroupbox2:AddLabel("flow color Red: ...")
+greenvallabel = LeftGroupbox2:AddLabel("flow color Green: ...")
+bluevallabel = LeftGroupbox2:AddLabel("flow color blue: ...")
 
+-- Update Labels Loop
+task.spawn(function()
+    while true do
+        local character = player.Character
 
-    -- Update Labels Loop
-    task.spawn(function()
-        while true do
+        if character and character:FindFirstChild("RankSystem") 
+        and character:FindFirstChild("AuraColour") then
+            local aura = character.AuraColour
+
             -- Update Ping
             pingLabel:SetText("Current Ping: " .. ping .. "ms")
-            
+
             -- Update Ability
             local currentAbility = "N/A"
             for _, val in ipairs(player.Backpack:GetChildren()) do
@@ -451,16 +449,28 @@
             end
             traitLabel:SetText("Current Trait: " .. currentTrait)
 
-            yen = player.Character.RankSystem.Yen.value
-            yenLabel:SetText("Yen: " .. yen)
+            -- Yen
+            yenLabel:SetText("Yen: " .. (character.RankSystem.Yen.Value or 0))
 
-            flow1 = player.Character.AuraColour.Buff.value
-            flow2 = player.Character.AuraColour.Buff:GetAttribute("BuffValue") * 10
-            flow1Label:SetText("Flow type: " .. flow1)
-            flow2Label:SetText("Flow buff: " .. flow2)
-            task.wait(0.02)
+            -- Flow type & buff
+            flow1Label:SetText("Flow type: " .. tostring(aura.Buff.Value))
+            flow2Label:SetText("Flow buff: " .. ((aura.Buff:GetAttribute("BuffValue") or 0) * 10))
+
+            -- Flow colors
+            redvallabel:SetText("flow color Red: " .. (aura.Red.Value * 1000 / 3.9089919))
+            greenvallabel:SetText("flow color Green: " .. (aura.Green.Value * 1000 / 3.9089919))
+            bluevallabel:SetText("flow color blue: " .. (aura.Blue.Value * 1000 / 3.9089919))
+        else
+            -- If character isn't ready after death, wait for respawn
+            pingLabel:SetText("Current Ping: ...")
+            yenLabel:SetText("Yen: ...")
+            flow1Label:SetText("Flow type: ...")
+            flow2Label:SetText("Flow buff: ...")
         end
-    end)
+
+        task.wait(0.01)
+    end
+end)
 
 
     local RightGroupbox2 = Tabs.Main:AddRightGroupbox("Flow")
@@ -508,85 +518,152 @@
         Visible = true, -- Will make the slider invisible (true / false)
     })
     RightGroupbox2:AddToggle("Flow buff Roll", {
-        Text = "Auto roll flow",
-        Tooltip = "Automatically rerolls until desired flow is found",
+    Text = "Auto roll flow",
+    Tooltip = "Automatically rerolls until desired flow is found",
 
-        Default = false,
-        Callback = function(Value)
-            if Value then
-                task.spawn(function()
-                    while Toggles["Flow buff Roll"] and Toggles["Flow buff Roll"].Value do
-                        local shouldStop = false
-                        local shouldHop = false
-                        local shouldRoll = true
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            task.spawn(function()
+                while Toggles["Flow buff Roll"] and Toggles["Flow buff Roll"].Value do
+                    local shouldStop = false
+                    local shouldHop = false
+                    local shouldRoll = true
 
-                        local success, err = pcall(function()
-                            local character = player.Character
-                            if not character then return end
+                    local function hasDesiredFlowBuff()
+                        local character = player.Character
+                        if not character then return false end
 
-                            local aura = character:FindFirstChild("AuraColour")
-                            if not aura then return end
+                        local aura = character:FindFirstChild("AuraColour")
+                        if not aura then return false end
 
-                            local buffObj = aura:FindFirstChild("Buff")
-                            if not buffObj then return end
+                        local buffObj = aura:FindFirstChild("Buff")
+                        if not buffObj then return false end
 
-                            local currentType = buffObj.Value
-                            local buffPercent = (buffObj:GetAttribute("BuffValue") or 0)
+                        local currentType = tostring(buffObj.Value)
+                        local buffPercent = tonumber(buffObj:GetAttribute("BuffValue")) or 0
 
-                            local selectedType = flowtype
-                            local minBuff = buff
+                        local selectedType = tostring(flowtype)
+                        local minBuff = tonumber(buff) or 0
 
-                            -- ✅ Already has correct flow and buff
-                            if currentType == selectedType and buffPercent >= minBuff then
-                                print("Player already has desired Flow and Buff. Stopping auto-roll.")
-                                shouldRoll = false
+                        return currentType == selectedType and buffPercent >= minBuff
+                    end
+
+                    local success, err = pcall(function()
+                        if hasDesiredFlowBuff() then
+                            print("Player already has desired Flow and Buff. Stopping auto-roll.")
+                            shouldRoll = false
+                            shouldStop = true
+                            return
+                        end
+
+                        local character = player.Character
+                        if character and character:FindFirstChild("RankSystem") and character.RankSystem:FindFirstChild("Yen") then
+                            local currentYen = character.RankSystem.Yen.Value
+                            if currentYen < tonumber(Options.minyen.Value) then
+                                print("Not enough Yen, rolling back + hopping")
+
+                                local args = {
+                                    [1] = "Right",
+                                    [2] = "F\255"
+                                }
+                                game.ReplicatedStorage:WaitForChild("rerolls"):WaitForChild("KeybindChange"):FireServer(unpack(args))
+                                task.wait(0.2)
+
                                 shouldStop = true
+                                shouldHop = true
                                 return
                             end
-
-                            -- ❌ Not enough Yen
-                            if player.Character:FindFirstChild("RankSystem") and player.Character.RankSystem:FindFirstChild("Yen") then
-                                local currentYen = player.Character.RankSystem.Yen.Value
-                                if currentYen < tonumber(Options.minyen.Value) then
-                                    print("Not enough Yen, rolling back + hopping")
-                                    
-                                    -- Rollback teleport
-                                    local args = {
-                                        [1] = "Right",
-                                        [2] = "F\255"
-                                    }
-                                    game.ReplicatedStorage:WaitForChild("rerolls"):WaitForChild("KeybindChange"):FireServer(unpack(args))
-                                    task.wait(0.2)
-
-                                    shouldStop = true
-                                    shouldHop = true
-                                    return
-                                end
-                            end
-                        end)
-
-                        if not success then
-                            warn("Flow Auto Roll error:", err)
                         end
+                    end)
 
-                        if shouldRoll then
-                            game.ReplicatedStorage.rerolls.buffreroll:FireServer()
-                        end
-
-                        if shouldHop then
-                            loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
-                        end
-
-                        if shouldStop then break end
-                        task.wait(ping / 1000)
+                    if not success then
+                        warn("Flow Auto Roll error:", err)
                     end
-                end)
-            end
+
+                    if shouldRoll then
+                        if not hasDesiredFlowBuff() then
+                            game.ReplicatedStorage.rerolls.buffreroll:FireServer()
+                        else
+                            print("Double-check: Desired flow and buff found before roll. Stopping.")
+                            shouldStop = true
+                        end
+                    end
+
+                    if shouldHop then
+                        loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
+                    end
+
+                    if shouldStop then break end
+                    local waitTime = 0.05
+                    if typeof(ping) == "number" then
+                        waitTime = ping / 1000 + 0.01
+                    end
+                    task.wait(waitTime)
+                end
+            end)
         end
+    end
+})
+
+
+local red = 5
+local green = 5
+local blue = 5
+RightGroupbox2:AddSlider("blackflow red max", {
+        Text = "blackflow red max",
+        Default = 5,
+        Min = 1,
+        Max = 15,
+        Rounding = 1,
+        Compact = false,
+
+        Callback = function(Value)
+            red = Value
+        end,
+
+        Tooltip = "I am a slider!", -- Information shown when you hover over the slider
+        DisabledTooltip = "I am disabled!", -- Information shown when you hover over the slider while it's disabled
+
+        Disabled = false, -- Will disable the slider (true / false)
+        Visible = true, -- Will make the slider invisible (true / false)
     })
+    RightGroupbox2:AddSlider("blackflow Green max", {
+        Text = "blackflow Green max",
+        Default = 5,
+        Min = 1,
+        Max = 15,
+        Rounding = 1,
+        Compact = false,
 
+        Callback = function(Value)
+            green = Value
+        end,
 
+        Tooltip = "I am a slider!", -- Information shown when you hover over the slider
+        DisabledTooltip = "I am disabled!", -- Information shown when you hover over the slider while it's disabled
 
+        Disabled = false, -- Will disable the slider (true / false)
+        Visible = true, -- Will make the slider invisible (true / false)
+    })
+    RightGroupbox2:AddSlider("blackflow Blue max", {
+        Text = "blackflow Blue max",
+        Default = 5,
+        Min = 1,
+        Max = 15,
+        Rounding = 1,
+        Compact = false,
+
+        Callback = function(Value)
+            blue = Value
+        end,
+
+        Tooltip = "I am a slider!", -- Information shown when you hover over the slider
+        DisabledTooltip = "I am disabled!", -- Information shown when you hover over the slider while it's disabled
+
+        Disabled = false, -- Will disable the slider (true / false)
+        Visible = true, -- Will make the slider invisible (true / false)
+    })
 
     local LeftGroupBox5 = Tabs.ingame:AddLeftGroupbox("Auto Flick")
 
@@ -630,6 +707,86 @@
         Disabled = false, -- Will disable the slider (true / false)
         Visible = true, -- Will make the slider invisible (true / false)
     })
+
+    RightGroupbox2:AddToggle("RGB Flow Roll", {
+    Text = "Auto roll RGB flow",
+    Tooltip = "Automatically rerolls until desired RGB values are found",
+    Default = false,
+
+    Callback = function(Value)
+        if Value then
+            local plr = game.Players.LocalPlayer
+            plr.Character.Humanoid.Health = 0
+            task.wait(5)
+            game.ReplicatedStorage.rerolls.Slots:FireServer("1")
+
+            task.spawn(function()
+                while Toggles["RGB Flow Roll"] and Toggles["RGB Flow Roll"].Value do
+                    local shouldStop = false
+                    local shouldRoll = true
+                    local shouldResetMoney = false
+
+                    local function hasDesiredRGB()
+                        local character = player.Character
+                        if not character then return false end
+
+                        local aura = character:FindFirstChild("AuraColour")
+                        if not aura then return false end
+
+                        local redVal = aura.Red.Value * 1000 / 3.9089919
+                        local greenVal = aura.Green.Value * 1000 / 3.9089919
+                        local blueVal = aura.Blue.Value * 1000 / 3.9089919
+
+                        return redVal <= red and greenVal <= green and blueVal <= blue
+                    end
+
+                    local success, err = pcall(function()
+                        if hasDesiredRGB() then
+                            print("Desired RGB values found. Preparing to server hop.")
+                            shouldRoll = false
+                            shouldStop = true
+                            return
+                        end
+
+                        local character = player.Character
+                        if character and character:FindFirstChild("RankSystem") and character.RankSystem:FindFirstChild("Yen") then
+                            local currentYen = character.RankSystem.Yen.Value
+                            if currentYen < tonumber(Options.minyen.Value) then
+                                print("Not enough Yen, resetting money to continue rolling.")
+                                shouldResetMoney = true
+                            end
+                        end
+                    end)
+
+                    if not success then
+                        warn("RGB Auto Roll error:", err)
+                    end
+
+                    if shouldResetMoney then
+                        game.ReplicatedStorage.rerolls.Slots:FireServer("1")
+                    end
+
+                    if shouldRoll then
+                        if not hasDesiredRGB() then
+                            game.ReplicatedStorage.rerolls.aurareroll:FireServer()
+                        else
+                            print("Double-check: Desired RGB values found before roll. Stopping.")
+                            shouldStop = true
+                        end
+                    end
+
+                    if shouldStop then
+                        loadstring(game:HttpGet("https://raw.githubusercontent.com/comethubasd/comet/refs/heads/main/best%20server"))()
+                        break
+                    end
+
+                    task.wait(ping / 1000 + 0.01) -- keep original wait time
+                end
+            end)
+        end
+    end
+})
+
 
     local shootConnection -- Declared outside to persist
 
@@ -986,7 +1143,6 @@
 
     
 
-
     local formAimZonesVisible = false
     local formAimZoneParts = {}
     local formAimUpdateLoop = nil
@@ -1138,8 +1294,6 @@
             end)
         end,
     })
-
-
 
     local formAimZonesVisible = false
     local formAimZoneParts = {}
@@ -1293,8 +1447,6 @@
         end,
     })
 
-
-
     local formAimZonesVisible = false
     local formAimZoneParts = {}
     local formAimUpdateLoop = nil
@@ -1352,7 +1504,6 @@
             end)
         end
     })
-
 
     -- UI Settings
     local MenuGroup = Tabs["UI Settings"]:AddLeftGroupbox("Menu")
