@@ -305,7 +305,7 @@
                     end
 
                     ReplicatedStorage.rerolls.specreroll:FireServer(2)
-                    task.wait(ping / 1000)
+                    task.wait(ping / 1000 +.01)
                 end
             end)
         end
@@ -375,7 +375,7 @@
                     end
 
                     ReplicatedStorage.rerolls.traitreroll:FireServer(2)
-                    task.wait(ping / 1000)
+                    task.wait(ping / 1000 + .01)
                 end
             end)
         end
