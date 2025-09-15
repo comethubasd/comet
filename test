@@ -1,0 +1,206 @@
+-- Robust ball lateral-prediction debug script
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local workspace = workspace
+
+local player = Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local root = char:WaitForChild("HumanoidRootPart")
+
+local lateralRange = 25          -- studs left/right
+local maxPredictionTime = 12     -- ignore predictions farther than this (seconds)
+local sampleVelFrames = 6        -- frames to use for sampled velocity fallback
+local printThrottle = 0.15       -- seconds between prints (avoid spam)
+local SEARCH_KEYWORD = "ball"    -- substring to find the ball (case-insensitive)
+
+-- debug marker & beam
+local predictedMarker = Instance.new("Part")
+predictedMarker.Name = "PredictedPointMarker"
+predictedMarker.Shape = Enum.PartType.Ball
+predictedMarker.Size = Vector3.new(0.4,0.4,0.4)
+predictedMarker.Anchored = true
+predictedMarker.CanCollide = false
+predictedMarker.Transparency = 0.2
+predictedMarker.Material = Enum.Material.Neon
+predictedMarker.Parent = workspace
+
+local function makeBeam(att0Parent, att1Parent)
+    local att0 = Instance.new("Attachment", att0Parent)
+    local att1 = Instance.new("Attachment", att1Parent)
+    local beam = Instance.new("Beam")
+    beam.Attachment0 = att0
+    beam.Attachment1 = att1
+    beam.Width0 = 0.15
+    beam.Width1 = 0.15
+    beam.FaceCamera = true
+    beam.Parent = att0Parent
+    return att0, att1, beam
+end
+
+-- helper to extract a BasePart from any instance (Model -> PrimaryPart or first BasePart)
+local function getBasePartFromInstance(inst)
+    if not inst then return nil end
+    if inst:IsA("BasePart") then return inst end
+    if inst:IsA("Model") then
+        if inst.PrimaryPart and inst.PrimaryPart:IsA("BasePart") then return inst.PrimaryPart end
+        for _,v in ipairs(inst:GetDescendants()) do
+            if v:IsA("BasePart") then return v end
+        end
+    end
+    return nil
+end
+
+-- finds the closest part whose name contains SEARCH_KEYWORD (case-insensitive)
+local function findBall()
+    local best, bestDist = nil, math.huge
+    local rootPos = root.Position
+    for _,inst in ipairs(workspace:GetDescendants()) do
+        if inst and inst.Name and string.find(string.lower(inst.Name), string.lower(SEARCH_KEYWORD)) then
+            local part = getBasePartFromInstance(inst)
+            if part and part:IsDescendantOf(workspace) then
+                local d = (part.Position - rootPos).Magnitude
+                if d < bestDist then bestDist = d; best = part end
+            end
+        end
+    end
+    return best
+end
+
+-- quadratic solver for: dx + vx*t + 0.5*ax*t^2 = target
+local function solveQuadraticForTarget(dx, vx, ax, target)
+    local A = 0.5 * ax
+    local B = vx
+    local C = dx - target
+
+    local sols = {}
+    if math.abs(A) < 1e-6 then
+        if math.abs(B) > 1e-6 then
+            local t = -C / B
+            if t >= 0 then table.insert(sols, t) end
+        end
+    else
+        local disc = B*B - 4*A*C
+        if disc >= 0 then
+            local s = math.sqrt(disc)
+            local t1 = (-B + s) / (2*A)
+            local t2 = (-B - s) / (2*A)
+            if t1 >= 0 then table.insert(sols, t1) end
+            if t2 >= 0 then table.insert(sols, t2) end
+        end
+    end
+    table.sort(sols)
+    return sols
+end
+
+-- main state
+local ballPart
+local att0, att1, beam
+local lastPositions = {} -- for sampled velocity
+local lastTime = tick()
+local lastPrint = 0
+
+-- try to (re)acquire the ball periodically
+local findTimer = 0
+RunService.Heartbeat:Connect(function(dt)
+    findTimer = findTimer + dt
+    if not ballPart or not ballPart:IsDescendantOf(workspace) then
+        if findTimer > 0.25 then
+            ballPart = findBall()
+            findTimer = 0
+            if ballPart then
+                print("[predict] found ball part:", ballPart:GetFullName(), "pos:", ballPart.Position)
+                -- create beam attachments (attach0 on ballPart, att1 on predictedMarker)
+                if att0 and att1 and att0.Parent and att1.Parent then
+                    -- cleanup old
+                    if att0.Parent:IsA("BasePart") then att0:Destroy() end
+                    if att1.Parent:IsA("BasePart") then att1:Destroy() end
+                end
+                att0, att1, beam = makeBeam(ballPart, predictedMarker)
+            else
+                print("[predict] no ball instance named with '"..SEARCH_KEYWORD.."', scanning workspace...")
+            end
+        end
+        return
+    end
+
+    -- sample positions for fallback velocity
+    lastTime = lastTime or tick()
+    table.insert(lastPositions, {pos = ballPart.Position, t = tick()})
+    if #lastPositions > sampleVelFrames then table.remove(lastPositions, 1) end
+
+    -- get velocity: prefer AssemblyLinearVelocity, fallback to sampled
+    local ballVel = Vector3.new(0,0,0)
+    local ok, vel = pcall(function() return ballPart.AssemblyLinearVelocity end)
+    if ok and vel and vel.Magnitude > 0.01 then
+        ballVel = vel
+    else
+        -- sampled
+        if #lastPositions >= 2 then
+            local first = lastPositions[1]
+            local last = lastPositions[#lastPositions]
+            local dtSample = last.t - first.t
+            if dtSample > 0 then
+                ballVel = (last.pos - first.pos) / dtSample
+            end
+        end
+    end
+
+    -- acceleration: default to gravity only (world Y)
+    local ballAccel = Vector3.new(0, -workspace.Gravity, 0)
+
+    -- lateral axis relative to player (right vector)
+    local right = root.CFrame.RightVector
+    local rel = ballPart.Position - root.Position
+    local dx = rel:Dot(right)               -- lateral offset (positive = to player's right)
+    local vx = ballVel:Dot(right)
+    local ax = ballAccel:Dot(right)        -- typically ~0 unless side forces exist
+
+    -- Solve for times when lateral coordinate equals ±lateralRange
+    local times = {}
+    local sols1 = solveQuadraticForTarget(dx, vx, ax, -lateralRange)
+    local sols2 = solveQuadraticForTarget(dx, vx, ax, lateralRange)
+    for _,t in ipairs(sols1) do table.insert(times, t) end
+    for _,t in ipairs(sols2) do table.insert(times, t) end
+    table.sort(times)
+
+    -- pick earliest positive, reasonable time
+    local chosenT
+    for _,t in ipairs(times) do
+        if t >= 0 and t <= maxPredictionTime then chosenT = t; break end
+    end
+
+    if chosenT then
+        local predictedPos = ballPart.Position + ballVel * chosenT + 0.5 * ballAccel * (chosenT^2)
+        predictedMarker.Position = predictedPos
+        if att1 then att1.WorldPosition = predictedPos end
+        if att0 then att0.WorldPosition = ballPart.Position end
+
+        local side = ((predictedPos - root.Position):Dot(right) > 0) and "Right" or "Left"
+
+        -- throttle prints
+        if tick() - lastPrint > printThrottle then
+            lastPrint = tick()
+            print(string.format(
+                "[predict] %s in %.2f s  | dx=%.2f vx=%.2f ax=%.4f  | ballVel=%.2f mag",
+                side, chosenT, dx, vx, ax, ballVel.Magnitude
+            ))
+        end
+    else
+        -- no prediction: update marker at ball and throttle messages
+        predictedMarker.Position = ballPart.Position
+        if att1 then att1.WorldPosition = ballPart.Position end
+        if tick() - lastPrint > 0.7 then
+            lastPrint = tick()
+            print(string.format(
+                "[predict] no lateral crossing predicted (dx=%.2f vx=%.2f ax=%.4f).",
+                dx, vx, ax
+            ))
+            -- helpful tips
+            if ballPart.Anchored then
+                print("[predict] note: ball is Anchored -> no motion to predict.")
+            elseif ballVel.Magnitude < 0.05 then
+                print("[predict] note: velocity is ~0; maybe the ball hasn't started moving yet.")
+            end
+        end
+    end
+end)
