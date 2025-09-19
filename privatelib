@@ -119,7 +119,7 @@ function MacLib:Window(Settings)
 
 	local baseUICorner = Instance.new("UICorner")
 	baseUICorner.Name = "BaseUICorner"
-	baseUICorner.CornerRadius = UDim.new(0, 10)
+	baseUICorner.CornerRadius = UDim.new(0, 5)
 	baseUICorner.Parent = base
 
 	local baseUIStroke = Instance.new("UIStroke")
@@ -903,7 +903,7 @@ function MacLib:Window(Settings)
 
 	local globalSettingsUICorner = Instance.new("UICorner")
 	globalSettingsUICorner.Name = "GlobalSettingsUICorner"
-	globalSettingsUICorner.CornerRadius = UDim.new(0, 10)
+	globalSettingsUICorner.CornerRadius = UDim.new(0, 5)
 	globalSettingsUICorner.Parent = globalSettings
 
 	local globalSettingsUIPadding = Instance.new("UIPadding")
@@ -983,7 +983,7 @@ function MacLib:Window(Settings)
 			DepthOfField = Instance.new('DepthOfFieldEffect')
 			DepthOfField.FarIntensity = 0
 			DepthOfField.FocusDistance = 51.6
-			DepthOfField.InFocusRadius = 50
+			DepthOfField.InFocusRadius = 25
 			DepthOfField.NearIntensity = 1
 			DepthOfField.Name = HS:GenerateGUID(true)
 			DepthOfField:AddTag(".")
@@ -996,7 +996,7 @@ function MacLib:Window(Settings)
 		DepthOfField = Instance.new('DepthOfFieldEffect')
 		DepthOfField.FarIntensity = 0
 		DepthOfField.FocusDistance = 51.6
-		DepthOfField.InFocusRadius = 50
+		DepthOfField.InFocusRadius = 25
 		DepthOfField.NearIntensity = 1
 		DepthOfField.Name = HS:GenerateGUID(true)
 		DepthOfField:AddTag(".")
