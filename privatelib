@@ -4613,6 +4613,9 @@ function MacLib:Window(Settings)
 						Tween(tabInfo.switcherImage, TweenInfo.new(easetime, Enum.EasingStyle.Sine), {
 							ImageTransparency = (i == tabSwitcher and 5 or 0.5)
 						}):Play()
+						tabImage.switcherName.BackgroundColor3 = (i == tabSwitcher)
+							and Color3.fromRGB(0, 0, 0)       -- Selected: Black text
+      						or Color3.fromRGB(255, 255, 255)  -- Not selected: White text
 					end
 					if tabInfo.switcherName then
     Tween(tabInfo.switcherName, TweenInfo.new(easetime, Enum.EasingStyle.Sine), {
