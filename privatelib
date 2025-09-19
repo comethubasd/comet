@@ -4615,10 +4615,14 @@ function MacLib:Window(Settings)
 						}):Play()
 					end
 					if tabInfo.switcherName then
-						Tween(tabInfo.switcherName, TweenInfo.new(easetime, Enum.EasingStyle.Sine), {
-							TextTransparency = (i == tabSwitcher and 5 or 0.5)
-						}):Play()
-					end
+    Tween(tabInfo.switcherName, TweenInfo.new(easetime, Enum.EasingStyle.Sine), {
+        TextTransparency = (i == tabSwitcher and 0 or 0.5)
+    }):Play()
+    tabInfo.switcherName.TextColor3 = (i == tabSwitcher)
+        and Color3.fromRGB(0, 0, 0)       -- Selected: Black text
+        or Color3.fromRGB(255, 255, 255)  -- Not selected: White text
+end
+
 				end
 
 				tabs[tabSwitcher].tabContent.Parent = content
