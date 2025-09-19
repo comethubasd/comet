@@ -616,8 +616,8 @@ function MacLib:Window(Settings)
 	tabSwitchersScrollingFrame.ScrollBarThickness = 1
 	tabSwitchersScrollingFrame.TopImage = ""
 	tabSwitchersScrollingFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	tabSwitchersScrollingFrame.BackgroundTransparency = 1
-	tabSwitchersScrollingFrame.BorderColor3 = Color3.fromRGB(255, 255, 255)
+	tabSwitchersScrollingFrame.BackgroundTransparency = 0
+	tabSwitchersScrollingFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	tabSwitchersScrollingFrame.BorderSizePixel = 0
 	tabSwitchersScrollingFrame.Size = UDim2.fromScale(1, 1)
 
