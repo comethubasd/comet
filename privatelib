@@ -1,6 +1,6 @@
 local MacLib = { 
 	Options = {}, 
-	Folder = "Snow hub", 
+	Folder = "Maclib", 
 	GetService = function(service)
 		return cloneref and cloneref(game:GetService(service)) or game:GetService(service)
 	end
@@ -106,7 +106,7 @@ function MacLib:Window(Settings)
 	local base = Instance.new("Frame")
 	base.Name = "Base"
 	base.AnchorPoint = Vector2.new(0.5, 0.5)
-	base.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	base.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	base.BackgroundTransparency = Settings.AcrylicBlur and 0.05 or 0
 	base.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	base.BorderSizePixel = 0
@@ -1347,7 +1347,7 @@ function MacLib:Window(Settings)
 		tabGroup.AutomaticSize = Enum.AutomaticSize.Y
 		tabGroup.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 		tabGroup.BackgroundTransparency = 1
-		tabGroup.BorderColor3 = Color3.fromRGB(255, 255, 255)
+		tabGroup.BorderColor3 = Color3.fromRGB(0, 0, 0)
 		tabGroup.BorderSizePixel = 0
 		tabGroup.Size = UDim2.fromScale(1, 0)
 
