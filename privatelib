@@ -4606,12 +4606,12 @@ function MacLib:Window(Settings)
 
 					if tabInfo.tabStroke then
 						Tween(tabInfo.tabStroke, TweenInfo.new(easetime, Enum.EasingStyle.Sine), {
-							Transparency = (i == tabSwitcher and 0.95 or 1)
+							Transparency = (i == tabSwitcher and 1.5 or 1)
 						}):Play()
 					end
 					if tabInfo.switcherImage then
 						Tween(tabInfo.switcherImage, TweenInfo.new(easetime, Enum.EasingStyle.Sine), {
-							ImageTransparency = (i == tabSwitcher and 0.1 or 0.5)
+							ImageTransparency = (i == tabSwitcher and 1.5 or 0.5)
 						}):Play()
 					end
 					if tabInfo.switcherName then
