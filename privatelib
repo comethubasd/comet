@@ -1365,7 +1365,7 @@ function MacLib:Window(Settings)
 		local sectionTabSwitchers = Instance.new("Frame")
 		sectionTabSwitchers.Name = "SectionTabSwitchers"
 		sectionTabSwitchers.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		sectionTabSwitchers.BackgroundTransparency = 1
+		sectionTabSwitchers.BackgroundTransparency = 0
 		sectionTabSwitchers.BorderColor3 = Color3.fromRGB(0, 0, 0)
 		sectionTabSwitchers.BorderSizePixel = 0
 		sectionTabSwitchers.Size = UDim2.fromScale(1, 1)
