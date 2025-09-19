@@ -1448,8 +1448,6 @@ function MacLib:Window(Settings)
 			)
 			tabSwitcherName.Text = Settings.Name
 			tabSwitcherName.RichText = true
-			tabSwitcherName.Thickness = 1 -- Glow when selected
-        	tabSwitcherName.Color = Color3.fromRGB(0, 0, 0)
 			tabSwitcherName.TextColor3 = Color3.fromRGB(255, 255, 255)
 			tabSwitcherName.TextSize = 16
 			tabSwitcherName.TextTransparency = 1
@@ -4609,9 +4607,10 @@ function MacLib:Window(Settings)
 					if tabInfo.tabStroke then
 						Tween(tabInfo.tabStroke, TweenInfo.new(easetime, Enum.EasingStyle.Sine), {
 							Transparency = (i == tabSwitcher and 0 or 1)'
-							Thickness = (i == tabSwitcher and 3 or 1), -- Glow when selected
-        					Color = (i == tabSwitcher and Color3.fromRGB(0, 255, 255) or Color3.fromRGB(0, 0, 0)) -- Bright color when selected'
 						}):Play()
+
+						Thickness = (i == tabSwitcher and 3 or 1), -- Glow when selected
+        					Color = (i == tabSwitcher and Color3.fromRGB(0, 255, 255) or Color3.fromRGB(0, 0, 0)) -- Bright color when selected'
 					end
 					if tabInfo.switcherImage then
 						Tween(tabInfo.switcherImage, TweenInfo.new(easetime, Enum.EasingStyle.Sine), {
