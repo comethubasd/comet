@@ -4616,7 +4616,7 @@ function MacLib:Window(Settings)
 					end
 					if tabInfo.switcherName then
 						Tween(tabInfo.switcherName, TweenInfo.new(easetime, Enum.EasingStyle.Sine), {
-							TextTransparency = (i == tabSwitcher and 0.1 or 0.5)
+							TextTransparency = (i == tabSwitcher and 100 or 0.5)
 						}):Play()
 					end
 				end
