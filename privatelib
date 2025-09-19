@@ -1450,7 +1450,7 @@ function MacLib:Window(Settings)
 			tabSwitcherName.RichText = true
 			tabSwitcherName.TextColor3 = Color3.fromRGB(255, 255, 255)
 			tabSwitcherName.TextSize = 16
-			tabSwitcherName.TextTransparency = 5
+			tabSwitcherName.TextTransparency = 1
 			tabSwitcherName.TextTruncate = Enum.TextTruncate.SplitWord
 			tabSwitcherName.TextXAlignment = Enum.TextXAlignment.Left
 			tabSwitcherName.TextYAlignment = Enum.TextYAlignment.Top
@@ -4616,7 +4616,8 @@ function MacLib:Window(Settings)
 					end
 					if tabInfo.switcherName then
 						Tween(tabInfo.switcherName, TweenInfo.new(easetime, Enum.EasingStyle.Sine), {
-							TextTransparency = (i == tabSwitcher and 5 or 5)
+							TextTransparency = (i == tabSwitcher and .1 or 0.5)
+							TextColor3 = Color3.fromRGB(i == tabSwitcher and 0 or 255, i == tabSwitcher and 0 or 255, i == tabSwitcher and 0 or 255)
 						}):Play()
 					end
 				end
