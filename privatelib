@@ -1890,7 +1890,7 @@ function MacLib:Window(Settings)
 
 					local sliderValueUICorner = Instance.new("UICorner")
 					sliderValueUICorner.Name = "SliderValueUICorner"
-					sliderValueUICorner.CornerRadius = UDim.new(0, 4)
+					sliderValueUICorner.CornerRadius = UDim.new(0, 2)
 					sliderValueUICorner.Parent = sliderValue
 
 					local sliderValueUIStroke = Instance.new("UIStroke")
@@ -2144,7 +2144,7 @@ function MacLib:Window(Settings)
 
 					local inputBoxUICorner = Instance.new("UICorner")
 					inputBoxUICorner.Name = "InputBoxUICorner"
-					inputBoxUICorner.CornerRadius = UDim.new(0, 4)
+					inputBoxUICorner.CornerRadius = UDim.new(0, 2)
 					inputBoxUICorner.Parent = inputBox
 
 					local inputBoxUIStroke = Instance.new("UIStroke")
@@ -2321,7 +2321,7 @@ function MacLib:Window(Settings)
 
 					local binderBoxUICorner = Instance.new("UICorner")
 					binderBoxUICorner.Name = "BinderBoxUICorner"
-					binderBoxUICorner.CornerRadius = UDim.new(0, 4)
+					binderBoxUICorner.CornerRadius = UDim.new(0, 2)
 					binderBoxUICorner.Parent = binderBox
 
 					local binderBoxUIStroke = Instance.new("UIStroke")
@@ -2508,7 +2508,7 @@ function MacLib:Window(Settings)
 
 					local dropdownUICorner = Instance.new("UICorner")
 					dropdownUICorner.Name = "DropdownUICorner"
-					dropdownUICorner.CornerRadius = UDim.new(0, 6)
+					dropdownUICorner.CornerRadius = UDim.new(0, 3)
 					dropdownUICorner.Parent = dropdown
 
 					local dropdownImage = Instance.new("ImageLabel")
@@ -3080,7 +3080,7 @@ function MacLib:Window(Settings)
 
 					local uICorner = Instance.new("UICorner")
 					uICorner.Name = "UICorner"
-					uICorner.CornerRadius = UDim.new(0, 6)
+					uICorner.CornerRadius = UDim.new(0, 3)
 					uICorner.Parent = colorC
 
 					local interact = Instance.new("TextButton")
@@ -3100,7 +3100,7 @@ function MacLib:Window(Settings)
 
 					local uICorner1 = Instance.new("UICorner")
 					uICorner1.Name = "UICorner"
-					uICorner1.CornerRadius = UDim.new(0, 8)
+					uICorner1.CornerRadius = UDim.new(0, 4)
 					uICorner1.Parent = colorCbg
 
 					colorCbg.Parent = colorpicker
@@ -3116,7 +3116,7 @@ function MacLib:Window(Settings)
 
 					local baseUICorner = Instance.new("UICorner")
 					baseUICorner.Name = "BaseUICorner"
-					baseUICorner.CornerRadius = UDim.new(0, 10)
+					baseUICorner.CornerRadius = UDim.new(0, 5)
 					baseUICorner.Parent = colorPicker
 
 					local prompt = Instance.new("Frame")
@@ -3143,7 +3143,7 @@ function MacLib:Window(Settings)
 
 					local globalSettingsUICorner = Instance.new("UICorner")
 					globalSettingsUICorner.Name = "GlobalSettingsUICorner"
-					globalSettingsUICorner.CornerRadius = UDim.new(0, 10)
+					globalSettingsUICorner.CornerRadius = UDim.new(0, 5)
 					globalSettingsUICorner.Parent = prompt
 
 					local uIListLayout = Instance.new("UIListLayout")
@@ -3209,7 +3209,7 @@ function MacLib:Window(Settings)
 
 					local uICorner1 = Instance.new("UICorner")
 					uICorner1.Name = "UICorner"
-					uICorner1.CornerRadius = UDim.new(0, 6)
+					uICorner1.CornerRadius = UDim.new(0, 3)
 					uICorner1.Parent = value
 
 					local uIStroke1 = Instance.new("UIStroke")
@@ -3350,7 +3350,7 @@ function MacLib:Window(Settings)
 
 					local inputBoxUICorner = Instance.new("UICorner")
 					inputBoxUICorner.Name = "InputBoxUICorner"
-					inputBoxUICorner.CornerRadius = UDim.new(0, 4)
+					inputBoxUICorner.CornerRadius = UDim.new(0, 2)
 					inputBoxUICorner.Parent = inputBox
 
 					local inputBoxUIStroke = Instance.new("UIStroke")
@@ -3433,7 +3433,7 @@ function MacLib:Window(Settings)
 
 					local inputBoxUICorner1 = Instance.new("UICorner")
 					inputBoxUICorner1.Name = "InputBoxUICorner"
-					inputBoxUICorner1.CornerRadius = UDim.new(0, 4)
+					inputBoxUICorner1.CornerRadius = UDim.new(0, 2)
 					inputBoxUICorner1.Parent = inputBox1
 
 					local inputBoxUIStroke1 = Instance.new("UIStroke")
@@ -3516,7 +3516,7 @@ function MacLib:Window(Settings)
 
 					local inputBoxUICorner2 = Instance.new("UICorner")
 					inputBoxUICorner2.Name = "InputBoxUICorner"
-					inputBoxUICorner2.CornerRadius = UDim.new(0, 4)
+					inputBoxUICorner2.CornerRadius = UDim.new(0, 2)
 					inputBoxUICorner2.Parent = inputBox2
 
 					local inputBoxUIStroke2 = Instance.new("UIStroke")
@@ -3600,7 +3600,7 @@ function MacLib:Window(Settings)
 
 					local inputBoxUICorner3 = Instance.new("UICorner")
 					inputBoxUICorner3.Name = "InputBoxUICorner"
-					inputBoxUICorner3.CornerRadius = UDim.new(0, 4)
+					inputBoxUICorner3.CornerRadius = UDim.new(0, 2)
 					inputBoxUICorner3.Parent = inputBox3
 
 					local inputBoxUIStroke3 = Instance.new("UIStroke")
@@ -3683,7 +3683,7 @@ function MacLib:Window(Settings)
 
 					local inputBoxUICorner4 = Instance.new("UICorner")
 					inputBoxUICorner4.Name = "InputBoxUICorner"
-					inputBoxUICorner4.CornerRadius = UDim.new(0, 4)
+					inputBoxUICorner4.CornerRadius = UDim.new(0, 2)
 					inputBoxUICorner4.Parent = inputBox4
 
 					local inputBoxUIStroke4 = Instance.new("UIStroke")
@@ -3845,7 +3845,7 @@ function MacLib:Window(Settings)
 
 					local baseUICorner = Instance.new("UICorner")
 					baseUICorner.Name = "BaseUICorner"
-					baseUICorner.CornerRadius = UDim.new(0, 10)
+					baseUICorner.CornerRadius = UDim.new(0, 5)
 					baseUICorner.Parent = confirm
 
 					confirm.Parent = interactions
@@ -3871,7 +3871,7 @@ function MacLib:Window(Settings)
 
 					local baseUICorner1 = Instance.new("UICorner")
 					baseUICorner1.Name = "BaseUICorner"
-					baseUICorner1.CornerRadius = UDim.new(0, 10)
+					baseUICorner1.CornerRadius = UDim.new(0, 5)
 					baseUICorner1.Parent = cancel
 
 					local uIPadding2 = Instance.new("UIPadding")
@@ -4803,7 +4803,7 @@ end
 
 		local notificationUICorner = Instance.new("UICorner")
 		notificationUICorner.Name = "NotificationUICorner"
-		notificationUICorner.CornerRadius = UDim.new(0, 10)
+		notificationUICorner.CornerRadius = UDim.new(0, 5)
 		notificationUICorner.Parent = notification
 
 		local notificationUIScale = Instance.new("UIScale")
@@ -5014,7 +5014,7 @@ end
 
 		local dialogUICorner = Instance.new("UICorner")
 		dialogUICorner.Name = "BaseUICorner"
-		dialogUICorner.CornerRadius = UDim.new(0, 10)
+		dialogUICorner.CornerRadius = UDim.new(0, 5)
 		dialogUICorner.Parent = dialog
 
 		local prompt = Instance.new("Frame")
@@ -5041,7 +5041,7 @@ end
 
 		local globalSettingsUICorner = Instance.new("UICorner")
 		globalSettingsUICorner.Name = "GlobalSettingsUICorner"
-		globalSettingsUICorner.CornerRadius = UDim.new(0, 10)
+		globalSettingsUICorner.CornerRadius = UDim.new(0, 5)
 		globalSettingsUICorner.Parent = prompt
 
 		local globalSettingsUIPadding = Instance.new("UIPadding")
@@ -5188,7 +5188,7 @@ end
 
 			local baseUICorner1 = Instance.new("UICorner")
 			baseUICorner1.Name = "BaseUICorner"
-			baseUICorner1.CornerRadius = UDim.new(0, 10)
+			baseUICorner1.CornerRadius = UDim.new(0, 5)
 			baseUICorner1.Parent = button
 
 			button.Parent = interactions
