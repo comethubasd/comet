@@ -1563,7 +1563,7 @@ function MacLib:Window(Settings)
 				local section = Instance.new("Frame")
 				section.Name = "Section"
 				section.AutomaticSize = Enum.AutomaticSize.Y
-				section.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				section.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 				section.BackgroundTransparency = 0.98
 				section.BorderColor3 = Color3.fromRGB(0, 0, 0)
 				section.BorderSizePixel = 0
