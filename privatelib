@@ -1416,6 +1416,8 @@ function MacLib:Window(Settings)
 			tabSwitcherUIStroke.Transparency = 1
 			tabSwitcherUIStroke.Thickness = 4
 			tabSwitcherUIStroke.Parent = tabSwitcher
+			
+			tabInfo.tabStroke = tabSwitcherUIStroke
 
 			local tabSwitcherUIListLayout = Instance.new("UIListLayout")
 			tabSwitcherUIListLayout.Name = "TabSwitcherUIListLayout"
