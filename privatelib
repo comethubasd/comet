@@ -4609,13 +4609,8 @@ function MacLib:Window(Settings)
 						Tween(tabInfo.tabStroke, TweenInfo.new(easetime, Enum.EasingStyle.Sine), {
 							Transparency = (i == tabSwitcher and 0 or 1)'
 						}):Play()
-						if i == tabSwitcher then
-        					tabInfo.tabStroke.Thickness = 4
-        					tabInfo.tabStroke.Color = Color3.fromRGB(0, 255, 255)
-    					else
-        					tabInfo.tabStroke.Thickness = 1
-        					tabInfo.tabStroke.Color = Color3.fromRGB(0, 0, 0)
-    					end
+						tabInfo.tabStroke.Thickness = (i == tabSwitcher and 4 or 1)
+    					tabInfo.tabStroke.Color = (i == tabSwitcher and Color3.fromRGB(0, 255, 255) or Color3.fromRGB(0, 0, 0))
 
 						
 					end
