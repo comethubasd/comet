@@ -1414,6 +1414,7 @@ function MacLib:Window(Settings)
 			tabSwitcherUIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 			tabSwitcherUIStroke.Color = Color3.fromRGB(255, 255, 255)
 			tabSwitcherUIStroke.Transparency = 1
+			tabSwitcherUIStroke.Thickness = 4
 			tabSwitcherUIStroke.Parent = tabSwitcher
 
 			local tabSwitcherUIListLayout = Instance.new("UIListLayout")
@@ -1450,8 +1451,6 @@ function MacLib:Window(Settings)
 			tabSwitcherName.RichText = true
 			tabSwitcherName.TextColor3 = Color3.fromRGB(255, 255, 255)
 			tabSwitcherName.TextSize = 16
-			tabSwitcherName.Thickness = 1 -- Glow when selected
-        	tabSwitcherName.Color = Color3.fromRGB(0, 0, 0)
 			tabSwitcherName.TextTransparency = 1
 			tabSwitcherName.TextTruncate = Enum.TextTruncate.SplitWord
 			tabSwitcherName.TextXAlignment = Enum.TextXAlignment.Left
